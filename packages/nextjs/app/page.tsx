@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -12,10 +13,18 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
+        <Image src="/profile.png" alt="logo" className="flex justify-center items-center max-w-[50%] pr-12" fill />
+
+        <Image src="/iprofile.png" alt="logo" className="flex max-w-[50%]" fill />
         <div className="px-5">
           <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+            <Image
+              src="/carlogo.png"
+              alt="logo"
+              className="flex justify-center items-center"
+              width={300}
+              height={300}
+            />
           </h1>
           <div className="flex justify-center items-center space-x-2">
             <p className="my-2 font-medium">Connected Address:</p>
