@@ -7,30 +7,24 @@ import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
-const Home: NextPage = () => {
+const Farm: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10 font-body">
-        <h1 className="relative text-center -top-12">
+        <h1 className="text-center">
           <Image src="/carlogo.png" alt="logo" className="flex justify-center items-center" width={300} height={300} />
+          FARM CARLO
         </h1>
         <div className="flex flex-row items-center">
-          <Image src="/sideEye.png" alt="logo" className="relative max-w-[50%] left-[50%] ml-[25%] mt-20" fill />
+          <Image src="/profile.png" alt="logo" className="relative max-w-[50%] " fill />
 
-          <Link
-            href="/farm"
-            onClick={() => {
-              console.log("clicked");
-            }}
-            className="absolute text-white p-2 w-[50px] h-[50px] rounded-lg cursor-pointer bottom-20 left-1/3 ml-52"
-          ></Link>
+          <Image src="/iprofile.png" alt="logo" className="relative max-w-[50%] left-1/2 top-0 ml-[50%]" fill />
         </div>
-        FARM CARLO
       </div>
     </>
   );
 };
 
-export default Home;
+export default Farm;
