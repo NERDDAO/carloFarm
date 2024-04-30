@@ -12,7 +12,7 @@ const Farm: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10 font-body">
+      <div className="container  bg-contain mx-auto flex items-center flex-col flex-grow pt-10 font-body">
         <h1 className="text-center">
           <Image src="/carlogo.png" alt="logo" className="flex justify-center items-center" width={300} height={300} />
           FARM CARLO
