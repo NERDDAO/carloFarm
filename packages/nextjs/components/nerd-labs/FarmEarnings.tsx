@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useContractRead } from 'wagmi';
-import externalContracts from '../../contracts/externalContracts';
+import React, { useEffect, useState } from "react";
+import externalContracts from "../../contracts/externalContracts";
+import { useContractRead } from "wagmi";
 
 function FarmEarnings() {
   const [lastRewardAmount, setLastRewardAmount] = useState<string | null>(null);
@@ -11,14 +11,14 @@ function FarmEarnings() {
   const { data: lastRewardAmountData } = useContractRead({
     address: externalContracts[8453].xStakingPool.address,
     abi: externalContracts[8453].xStakingPool.abi,
-    functionName: 'lastRewardAmount',
+    functionName: "lastRewardAmount",
   });
 
   // Read the totalSupply from the contract
   const { data: totalSupplyData } = useContractRead({
     address: externalContracts[8453].xStakingPool.address,
     abi: externalContracts[8453].xStakingPool.abi,
-    functionName: 'totalSupply',
+    functionName: "totalSupply",
   });
 
   useEffect(() => {
@@ -43,10 +43,10 @@ function FarmEarnings() {
   }, [lastRewardAmount, totalSupply]);
 
   return (
-    <div style={{color: "#ff00ff", display: "inline-table"}}>
+    <div style={{ color: "#ff00ff", display: "inline-table" }}>
       <h3>Contract Stats</h3>
       <p>Total Supply Staked: {totalSupply ? (Number(totalSupply) / 10 ** 18).toFixed(2) : null}</p>
-      <p>Monthly Interest per Token: {monthlyInterest ? ((monthlyInterest * 10 ** 18)*100).toFixed(6) : null}%</p>
+      <p>Monthly Interest per Token: {monthlyInterest ? (monthlyInterest * 10 ** 18 * 100).toFixed(6) : null}%</p>
     </div>
   );
 }
