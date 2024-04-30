@@ -1,12 +1,24 @@
-import FarmApprove from "./FarmApprove";
+import React, { useEffect, useState } from "react";
 import FarmEarnings from "./FarmEarnings";
+import FarmApprove from "./farmApprove";
 import Tippy from "@tippyjs/react";
 import Modal from "react-modal";
 import { useAccount } from "wagmi";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Staking = () => {
   //const maxAmount = ethers.MaxUint256;
+
+  const modalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
 
   const account = useAccount();
   const stakingPool = "0x7de38e45A074fBa05053801Bd3a66f3C8C155d31";
@@ -16,33 +28,33 @@ const Staking = () => {
   const [optIndex, setOptIndex] = useState(0);
   const [fcknBalance, setFcknBalance] = useState(0);
   const [xFcknBalance, setXFcknBalance] = useState(0);
-  const approval = useScaffoldContractRead({
+  const approval = useScaffoldReadContract({
     contractName: "fcknToken",
     functionName: "allowance",
     args: [account.address, stakingPool],
   });
-  const balance = useScaffoldContractRead({
+  const balance = useScaffoldReadContract({
     contractName: "fcknToken",
     functionName: "balanceOf",
     args: [account.address],
   });
-  const stakedBalance = useScaffoldContractRead({
+  const stakedBalance = useScaffoldReadContract({
     contractName: "xStakingPool",
     functionName: "balanceOf",
     args: [account.address],
   });
-  const ppShare = useScaffoldContractRead({
+  const ppShare = useScaffoldReadContract({
     contractName: "xStakingPool",
     functionName: "getPricePerFullShare",
   });
 
-  const stake = useScaffoldContractWrite({
+  const stake = useScaffoldWriteContract({
     contractName: "xStakingPool",
     functionName: "stake",
     args: [BigInt(fcknBalance * 1e18)],
   });
 
-  const unstake = useScaffoldContractWrite({
+  const unstake = useScaffoldWriteContract({
     contractName: "xStakingPool",
     functionName: "withdraw",
     args: [BigInt(xFcknBalance * 1e18)],
@@ -153,10 +165,10 @@ const Staking = () => {
 
   return (
     <>
-      <Tippy className="relative -left-24" content={<span>View $FCKN 🍗 Staking</span>}>
+      <Tippy className="relative" content={<span>View $FCKN 🍗 Staking</span>}>
         <div
           onClick={() => setModalIsOpen(true)}
-          className="bg-[url(/chicken.png)] bg-contain bg-no-repeat relative md:scale-90 sm:scale-90 h-[50%] w-[30%] top-1/3 sm:ml-16 sm:-mt-4 md:-mt-4 left-34 md:ml-32 lg:ml-24 lg:-mt-8 2xl:-mt-12  xl:ml-36 2xl:ml-52 cursor-pointer transform origin-bottom hover:scale-110"
+          className="bg-[url(/profile.png)] bg-contain bg-no-repeat relative h-full w-full top-0 left-0"
         />
       </Tippy>
 

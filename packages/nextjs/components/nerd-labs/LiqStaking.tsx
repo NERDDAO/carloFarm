@@ -1,12 +1,25 @@
 //import FarmEarnings from "./FarmEarnings";
-import FarmApprove from "./FarmApprove";
+//
+import React, { useEffect, useState } from "react";
 import Tippy from "@tippyjs/react";
 import { ethers } from "ethers";
 import Modal from "react-modal";
 import { useAccount } from "wagmi";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import FarmApprove from "~~/components/nerd-labs/farmApprove";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const LiqStaking = () => {
+  const modalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
   const maxAmount = ethers.MaxUint256;
 
   const account = useAccount();
@@ -33,42 +46,42 @@ const LiqStaking = () => {
   const [fcknBalance, setFcknBalance] = useState(0);
   const [xFcknBalance, setXFcknBalance] = useState(0);
 
-  const approval = useScaffoldContractRead({
+  const approval = useScaffoldReadContract({
     contractName: currentFarm.name,
     functionName: "allowance",
     args: [account.address, currentFarm.pool],
   });
-  const balance = useScaffoldContractRead({
+  const balance = useScaffoldReadContract({
     contractName: currentFarm.name,
     functionName: "balanceOf",
     args: [account.address],
   });
-  const earned = useScaffoldContractRead({
+  const earned = useScaffoldReadContract({
     contractName: currentFarm.poolName,
     functionName: "earned",
     args: [account.address],
   });
-  const stakedBalance = useScaffoldContractRead({
+  const stakedBalance = useScaffoldReadContract({
     contractName: currentFarm.poolName,
     functionName: "balanceOf",
     args: [account.address],
   });
-  const claim = useScaffoldContractWrite({
+  const claim = useScaffoldWriteContract({
     contractName: currentFarm.poolName,
     functionName: "getReward",
   });
-  const stake = useScaffoldContractWrite({
+  const stake = useScaffoldWriteContract({
     contractName: currentFarm.poolName,
     functionName: "stake",
     args: [BigInt(fcknBalance * 1e18)],
   });
-  const approve = useScaffoldContractWrite({
+  const approve = useScaffoldWriteContract({
     contractName: currentFarm.name,
     functionName: "approve",
     args: [currentFarm.pool, maxAmount],
   });
 
-  const unstake = useScaffoldContractWrite({
+  const unstake = useScaffoldWriteContract({
     contractName: currentFarm.poolName,
     functionName: "withdraw",
     args: [BigInt(xFcknBalance * 1e18)],
@@ -246,7 +259,7 @@ const LiqStaking = () => {
       <Tippy className="relative" content={<span>View $FCKN 🍗 Liquidity Farms</span>}>
         <div
           onClick={() => setModal2IsOpen(true)}
-          className="bg-[url(/liquidity.png)] bg-contain bg-no-repeat relative h-2/3 w-1/4 -top-12 sm:mt-12 sm:ml-12 2xl:mt-4 lg:mt-16 md:mt-24 md:ml-12 2xl:ml-20 left-1/3 cursor-pointer transform origin-bottom-left hover:scale-110"
+          className="bg-[url(/iprofile.png)] bg-contain bg-no-repeat relative h-full w-full"
         />
       </Tippy>
 

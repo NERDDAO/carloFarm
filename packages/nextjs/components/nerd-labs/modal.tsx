@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import LiqStaking from "./LiqStaking.tsx";
 import Staking from "./Staking.tsx";
-//import React, { useEffect, useState } from 'react';
 import Tippy from "@tippyjs/react";
 import Player from "YtPlayer.tsx";
 import type { NextPage } from "next";
