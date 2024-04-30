@@ -165,10 +165,10 @@ const Staking = () => {
 
   return (
     <>
-      <Tippy className="relative" content={<span>View $FCKN 🍗 Staking</span>}>
+      <Tippy className="relative top-12" content={<span>View $CARLO Staking</span>}>
         <div
           onClick={() => setModalIsOpen(true)}
-          className="bg-[url(/profile.png)] bg-contain bg-no-repeat relative h-full w-full top-0 left-0"
+          className="bg-[url(/profile.png)] hover:bg-[url(/Vomiting.png)] bg-contain bg-no-repeat relative h-full w-full top-0 left-0"
         />
       </Tippy>
 

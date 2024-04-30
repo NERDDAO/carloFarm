@@ -256,10 +256,10 @@ const LiqStaking = () => {
 
   return (
     <>
-      <Tippy className="relative" content={<span>View $FCKN 🍗 Liquidity Farms</span>}>
+      <Tippy className="relative top-12" content={<span>View $CARLO/ETH LP Farm</span>}>
         <div
           onClick={() => setModal2IsOpen(true)}
-          className="bg-[url(/iprofile.png)] bg-contain bg-no-repeat relative h-full w-full"
+          className="bg-[url(/iprofile.png)] hover:bg-[url(/pee.png)] bg-contain bg-no-repeat relative h-full w-full"
         />
       </Tippy>
 
