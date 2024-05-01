@@ -98,10 +98,12 @@ const Staking = () => {
     }
   };
 
-  const optts = ["deposit", "withdraw", "approve"];
+  const optts = ["approve", "deposit", "withdraw", ];
 
   const functionRender = () => {
     switch (optts[optIndex]) {
+      case "approve":
+        return <FarmApprove />;
       case "deposit":
         return (
           <>
@@ -152,8 +154,7 @@ const Staking = () => {
           </>
         );
 
-      case "approve":
-        return <FarmApprove />;
+     
       default:
         return <div>default</div>;
     }
@@ -175,7 +176,7 @@ const Staking = () => {
         style={modalStyles}
       >
         <div class="card w-96 bg-base-100 shadow-xl">
-          <strong className="card-title">$Carlo LP Farming</strong>
+          <strong className="card-title">$Carlo Liquid Staking</strong>
           <div class="card-body">{functionRender()}</div>
           <br />
 
