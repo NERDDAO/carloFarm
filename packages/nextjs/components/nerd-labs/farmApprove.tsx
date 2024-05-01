@@ -3,7 +3,11 @@ import { ethers } from 'ethers';
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth/';
 import externalContracts from '../../contracts/externalContracts';
 
-function Erc20FarmApprove() {
+interface Erc20FarmApproveProps {
+  onApproveSuccess: () => void;
+}
+
+function Erc20FarmApprove({ onApproveSuccess }: Erc20FarmApproveProps) {
   const contractName = "fcknToken";
   const spender = externalContracts[8453].xStakingPool.address;
   const amount = ethers.MaxUint256;
@@ -20,6 +24,7 @@ function Erc20FarmApprove() {
 
     if (writeContractAsync) {
       await writeContractAsync(variables);
+      onApproveSuccess();
     }
   };
 

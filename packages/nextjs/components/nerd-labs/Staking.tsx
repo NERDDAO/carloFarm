@@ -60,6 +60,7 @@ const Staking = () => {
     unstake.contractName,
   );
 
+
   const handleStakeFunction = async () => {
     try {
       await writeStake(
@@ -103,7 +104,7 @@ const Staking = () => {
   const functionRender = () => {
     switch (optts[optIndex]) {
       case "approve":
-        return <FarmApprove />;
+        return <FarmApprove onApproveSuccess={() => setOptIndex(1)} />;
       case "deposit":
         return (
           <>
