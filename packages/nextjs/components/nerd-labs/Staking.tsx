@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FarmEarnings from "./FarmEarnings";
 import FarmApprove from "./farmApprove";
 import Tippy from "@tippyjs/react";
@@ -21,18 +21,12 @@ const Staking = () => {
   };
 
   const account = useAccount();
-  const stakingPool = "0x7de38e45A074fBa05053801Bd3a66f3C8C155d31";
-  const [isUnstake, setIsUnstake] = useState(false);
+  const stakingPool = "0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005";
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  //const [modal2IsOpen, setModal2IsOpen] = useState(false);
   const [optIndex, setOptIndex] = useState(0);
   const [fcknBalance, setFcknBalance] = useState(0);
   const [xFcknBalance, setXFcknBalance] = useState(0);
-  const approval = useScaffoldReadContract({
-    contractName: "fcknToken",
-    functionName: "allowance",
-    args: [account.address, stakingPool],
-  });
+
   const balance = useScaffoldReadContract({
     contractName: "fcknToken",
     functionName: "balanceOf",
@@ -48,30 +42,61 @@ const Staking = () => {
     functionName: "getPricePerFullShare",
   });
 
-  const stake = useScaffoldWriteContract({
+  const stake = {
     contractName: "xStakingPool",
     functionName: "stake",
     args: [BigInt(fcknBalance * 1e18)],
-  });
+  };
 
-  const unstake = useScaffoldWriteContract({
+  const unstake = {
     contractName: "xStakingPool",
     functionName: "withdraw",
     args: [BigInt(xFcknBalance * 1e18)],
-  });
+  };
 
-  useEffect(() => {
-    if (Number(approval.data) > 0) {
-      if (isUnstake === true) {
-        setOptIndex(1);
-        console.log("Unstaking");
-        return;
-      }
-      setOptIndex(0);
-      return;
+  const { writeContractAsync: writeStake, isPending: isStakePending } = useScaffoldWriteContract(stake.contractName);
+
+  const { writeContractAsync: writeUnstake, isPending: isUnstakePending } = useScaffoldWriteContract(
+    unstake.contractName,
+  );
+
+  const handleStakeFunction = async () => {
+    try {
+      await writeStake(
+        {
+          functionName: stake.functionName,
+          args: stake.args,
+          value: stake.value ? parseEther(stake.value) : "",
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${stake.functionName} on ${stake.contractName}"`, e);
     }
-    setOptIndex(2);
-  }, [isUnstake, modalIsOpen]);
+  };
+
+  const handleUnstakeFunction = async () => {
+    try {
+      await writeUnstake(
+        {
+          functionName: unstake.functionName,
+          args: unstake.args,
+          value: unstake.value ? parseEther(unstake.value) : "",
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${unstake.functionName} on ${unstake.contractName}"`, e);
+    }
+  };
 
   const optts = ["deposit", "withdraw", "approve"];
 
@@ -80,78 +105,49 @@ const Staking = () => {
       case "deposit":
         return (
           <>
-            <strong>$FCKN 🍗 Staking</strong>
-            <span className="text-sm">$FCKN 🍗 Balance: {(Number(balance?.data) * 1e-18).toFixed(3)} $FCKN</span>
+            <strong>$xCarlo</strong>
+            <span className="text-sm">$Carlo Balance: {(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</span>
 
             <span className="text-sm">
-              Staked $FCKN 🍗 Balance:{" "}
-              {(Number(ppShare.data) * 1e-18 * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $FCKN{" "}
+              $xCarlo Balance: {(Number(ppShare.data) * 1e-18 * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $Carlo{" "}
             </span>
             <label className="cursor-pointer" onClick={() => setFcknBalance(Number(balance.data) * 1e-18 || 0)}>
               max
             </label>
             <input
               className="border-2"
-              placeholder="$FCKN %🍗"
+              placeholder="$Carlo"
               value={fcknBalance}
               type="number"
               onChange={e => setFcknBalance(Number(e.target.value))}
             />
-            <Tippy className="relative" content={<span>$FCKN 🍗 STAKE</span>}>
-              <button
-                className="border-e-rose-200 border-2 bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  stake.write();
-                  setModalIsOpen(false);
-                }}
-              />
+            <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
+              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
+                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+              </button>
             </Tippy>
-            <Tippy className="relative" content={<span>$FCKN 🍗 TOGGLE</span>}>
-              <button
-                className="bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  setIsUnstake(true);
-                }}
-              />
-            </Tippy>
-            <FarmEarnings />
           </>
         );
       case "withdraw":
         return (
           <>
-            <strong>$FCKN 🍗 unStaking</strong>
-            <span className="text-sm">$FCKN 🍗 Balance: {(Number(balance.data) * 1e-18).toFixed(3)} $FCKN</span>
-            <span className="text-sm">
-              {" "}
-              Staked $FCKN 🍗 Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $FCKN{" "}
-            </span>
+            <strong>$xCarlo unStaking</strong>
+            <span className="text-sm">$Carlo Balance: {(Number(balance.data) * 1e-18).toFixed(3)} $Carlo</span>
+            <span className="text-sm"> $xCarlo Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $Carlo</span>
             <label onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)} className="cursor-pointer">
               max
             </label>{" "}
             <input
               className="border-2"
-              placeholder="$xFCKN Balance"
+              placeholder="$xCarlo Balance"
               value={Number(xFcknBalance)}
               type="number"
               onChange={e => setXFcknBalance(Number(e.target.value))}
             />
-            <Tippy className="relative" content={<span>$FCKN 🍗 WITHDRAW</span>}>
-              <button
-                className="border-e-rose-200 border-2 bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  unstake.write();
-                  setModalIsOpen(false);
-                }}
-              />
-            </Tippy>
-            <Tippy className="relative" content={<span>$FCKN 🍗 TOGGLE</span>}>
-              <button
-                className="bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  setIsUnstake(false);
-                }}
-              />
+            <Tippy className="relative" content={<span>unWrap $Carlo</span>}>
+              <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
+                {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
+              </button>
             </Tippy>
           </>
         );
@@ -178,8 +174,37 @@ const Staking = () => {
         contentLabel="Exercise Completed"
         style={modalStyles}
       >
-        <div className="flex flex-col bg-transparent -backdrop-hue-rotate-30 align-baseline snap-center items-center space-y-2">
-          {functionRender()}
+        <div class="card w-96 bg-base-100 shadow-xl">
+          <strong className="card-title">$Carlo LP Farming</strong>
+          <div class="card-body">{functionRender()}</div>
+          <br />
+
+          <span className="text-sm"> $xCarlo Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $Carlo </span>
+          {/*<a className="text-xs text-blue-500" href={`https://basescan.org/token/${currentFarm.pool}`} target="_blank">
+            View in BaseScan
+          </a>*/}
+
+          <FarmEarnings address={stakingPool} />
+          <div className="card-actions justify-end">
+            <div className="flex flex-row space-x-4">
+              <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
+                <button
+                  className="color-blue-500 border-e-rose-200 border-2 bg-[url(/addLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
+                  onClick={() => {
+                    setOptIndex(0);
+                  }}
+                />
+              </Tippy>
+              <Tippy className="relative" content={<span>Unwrap $Carlo</span>}>
+                <button
+                  className="color-blue-500 border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
+                  onClick={() => {
+                    setOptIndex(1);
+                  }}
+                />
+              </Tippy>
+            </div>
+          </div>
         </div>
       </Modal>
     </>

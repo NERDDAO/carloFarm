@@ -1,5 +1,5 @@
 // optional
-import React, { useEffect, useState } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 import YouTube from "react-youtube";
 // required
