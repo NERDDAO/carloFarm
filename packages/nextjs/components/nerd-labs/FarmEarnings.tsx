@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import externalContracts from "../../contracts/externalContracts";
 import { useContractRead } from "wagmi";
 
-function FarmEarnings() {
+function FarmEarnings(address: string) {
   const [lastRewardAmount, setLastRewardAmount] = useState<string | null>(null);
   const [totalSupply, setTotalSupply] = useState<string | null>(null);
   const [monthlyInterest, setMonthlyInterest] = useState<number | null>(null);
 
   // Read the lastRewardAmount from the contract
   const { data: lastRewardAmountData } = useContractRead({
-    address: externalContracts[8453].xStakingPool.address,
+    address: address,
     abi: externalContracts[8453].xStakingPool.abi,
     functionName: "lastRewardAmount",
   });
 
   // Read the totalSupply from the contract
   const { data: totalSupplyData } = useContractRead({
-    address: externalContracts[8453].xStakingPool.address,
+    address: address,
     abi: externalContracts[8453].xStakingPool.abi,
     functionName: "totalSupply",
   });

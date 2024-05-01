@@ -36,7 +36,7 @@ const LiqStaking = () => {
   //const [isUnstake, setIsUnstake] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modal2IsOpen, setModal2IsOpen] = useState(false);
-  const [optIndex, setOptIndex] = useState(0);
+  const [optIndex, setOptIndex] = useState(3);
   const [fcknBalance, setFcknBalance] = useState(0);
   const [xFcknBalance, setXFcknBalance] = useState(0);
 
@@ -64,22 +64,89 @@ const LiqStaking = () => {
     contractName: currentFarm.poolName,
     functionName: "getReward",
   });
-  const stake = useScaffoldWriteContract({
+  const stake = {
     contractName: currentFarm.poolName,
     functionName: "stake",
     args: [BigInt(fcknBalance * 1e18)],
-  });
-  const approve = useScaffoldWriteContract({
+  };
+
+  const approve = {
     contractName: currentFarm.name,
     functionName: "approve",
     args: [currentFarm.pool, maxAmount],
-  });
+  };
 
-  const unstake = useScaffoldWriteContract({
+  const unstake = {
     contractName: currentFarm.poolName,
     functionName: "withdraw",
     args: [BigInt(xFcknBalance * 1e18)],
-  });
+  };
+  const { writeContractAsync: writeApprove, isPending: isApprovePending } = useScaffoldWriteContract(
+    approve.contractName,
+  );
+
+  const { writeContractAsync: writeStake, isPending: isStakePending } = useScaffoldWriteContract(stake.contractName);
+
+  const { writeContractAsync: writeUnstake, isPending: isUnstakePending } = useScaffoldWriteContract(
+    unstake.contractName,
+  );
+
+  const handleApproveFunction = async () => {
+    try {
+      await writeApprove(
+        {
+          functionName: approve.functionName,
+          args: approve.args,
+          value: approve.value ? parseEther(approve.value) : "",
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${approve.functionName} on ${approve.contractName}"`, e);
+    }
+  };
+
+  const handleStakeFunction = async () => {
+    try {
+      await writeStake(
+        {
+          functionName: stake.functionName,
+          args: stake.args,
+          value: stake.value ? parseEther(stake.value) : "",
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${stake.functionName} on ${stake.contractName}"`, e);
+    }
+  };
+
+  const handleUnstakeFunction = async () => {
+    try {
+      await writeUnstake(
+        {
+          functionName: unstake.functionName,
+          args: unstake.args,
+          value: unstake.value ? parseEther(unstake.value) : "",
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${unstake.functionName} on ${unstake.contractName}"`, e);
+    }
+  };
 
   useEffect(() => {
     if (!currentFarm) return;
@@ -99,12 +166,9 @@ const LiqStaking = () => {
             <div className="flex flex-col items-center space-y-2 ">
               {Number(approval.data) == 0 && (
                 <Tippy className="relative" content={<span>Approve $FCKN 🍗 Tokens</span>}>
-                  <button
-                    className="color-blue-500 border-e-rose-200 border-2 bg-[url(/shaker.png)] bg-contain bg-no-repeat h-[75px] w-[50px]"
-                    onClick={() => {
-                      approve.write();
-                    }}
-                  />
+                  <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
+                    {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
+                  </button>
                 </Tippy>
               )}
             </div>
@@ -130,20 +194,16 @@ const LiqStaking = () => {
             />
 
             <Tippy className="relative" content={<span>STAKE</span>}>
-              <button
-                className="border-e-rose-200 border-2 bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  stake.write();
-                  setModalIsOpen(false);
-                }}
-              />
+              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
+                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+              </button>
             </Tippy>
           </>
         );
       case "withdraw":
         return (
           <>
-            <strong>$FCKN 🍗 unStaking</strong>
+            <strong>$Carlo LP unStaking</strong>
             <span className="text-sm">$Carlo Balance: {(Number(balance.data) * 10e-18).toFixed(3)} $FCKN</span>
 
             <label onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)} className="cursor-pointer">
@@ -157,19 +217,26 @@ const LiqStaking = () => {
               onChange={e => setXFcknBalance(Number(e.target.value))}
             />
             <Tippy className="relative" content={<span> WITHDRAW</span>}>
-              <button
-                className="border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                onClick={() => {
-                  unstake.write();
-                  setModalIsOpen(false);
-                }}
-              />
+              <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
+                {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
+              </button>
             </Tippy>
           </>
         );
 
       case "approve":
-        return <FarmApprove />;
+        return (
+          <>
+            <strong>Carlo Approve</strong>
+            <span className="text-sm">$Carlo LP Balance: {(Number(balance.data) * 10e-18).toFixed(3)} UniV2</span>
+
+            <Tippy className="relative" content={<span> WITHDRAW</span>}>
+              <button className="btn btn-primary" onClick={handleApproveFunction} disabled={isApprovePending}>
+                {isApprovePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
+              </button>
+            </Tippy>
+          </>
+        );
       default:
         return <div>default{modalIsOpen}</div>;
     }

@@ -1386,7 +1386,7 @@ const externalContracts = {
       ],
     },
     xStakingPool: {
-      address: "0x7de38e45A074fBa05053801Bd3a66f3C8C155d31",
+      address: "0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005",
       abi: [
         {
           type: "function",
