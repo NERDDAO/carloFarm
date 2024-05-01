@@ -689,7 +689,7 @@ const externalContracts = {
       ],
     },
     fcknToken: {
-      address: "0x7D12aEb5d96d221071d176980D23c213d88d9998",
+      address: "0x38d513Ec43ddA20f323f26c7bef74c5cF80b6477",
       abi: [
         {
           inputs: [
@@ -920,8 +920,8 @@ const externalContracts = {
         { stateMutability: "payable", type: "receive" },
       ],
     },
-    "$FCKN/$WETH": {
-      address: "0x9c449D92b6Fcb8285b8175B8f9C5dc00F05B797C",
+    "$Carlo/$WETH": {
+      address: "0x53f64cde28dd3caef17e701593b4ad7a95f0f61c",
       abi: [
         {
           inputs: [
@@ -1665,7 +1665,7 @@ const externalContracts = {
     },
 
     wethStakingPool: {
-      address: "0x8b7246d22dfe2f8e5f09e466f5f98f2f62dd52b6",
+      address: "0x3FdC7fEf77208Aaac44E81bA982a9855642411D2",
       abi: [
         {
           type: "function",
