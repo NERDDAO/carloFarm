@@ -47,3 +47,23 @@ p {
     src: url(/Twist-Regular.otf) format("otf");
   }
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse:hover {
+  animation: pulse 1s infinite;
+}
+
+/* .pulse:hover {
+  animation: pulse 1s infinite;
+} */
