@@ -28,10 +28,10 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
     <>
       <div
         className="transition ease-in-out duration-100 flex flex-col min-h-screen bg-gradient-to-r hover:bg-gradient-to-l  
-        from-sky-500 to-indigo-500"
+        from-sky-500 to-indigo-500 overflow-x-hidden"
       >
         <Header />
-        <main className="relative flex flex-col flex-1">{children}</main>
+        <main className="container mx-auto relative flex flex-col flex-1">{children}</main>
         <Footer />
       </div>
       <Toaster />
