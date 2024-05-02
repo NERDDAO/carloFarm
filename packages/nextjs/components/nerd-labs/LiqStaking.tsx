@@ -155,20 +155,20 @@ const LiqStaking = () => {
     earned.refetch();
   }, [currentFarm, account.address]);
 
-  const optts = ["selector", "approve", "deposit", "withdraw"];
+  const optts = ["approve", "both"];
 
   useEffect(() => {
     const checkApproval = async () => {
       const allowance = Number(approval.data);
       if (allowance > 0) {
-        setOptIndex(optts.indexOf("deposit"));
+        setOptIndex(optts.indexOf("both"));
       } else {
         setOptIndex(optts.indexOf("approve"));
       }
     };
 
     checkApproval();
-  }, [approval.data, optts]);
+  }, [approval.data]);
 
   const liquidityFunctionRender = () => {
     switch (optts[optIndex]) {
@@ -176,7 +176,7 @@ const LiqStaking = () => {
         return (
           <>
             <strong>Carlo Approve</strong>
-            <span className="text-sm">$Carlo LP Balance: {(Number(balance.data) * 10e-18).toFixed(3)} UniV2</span>
+            <span className="text-sm">$Carlo LP Balance: {(Number(balance.data) * 1e-18).toFixed(3)} UniV2</span>
             <Tippy className="relative" content={<span>Approve</span>}>
               <button className="btn btn-primary" onClick={handleApproveFunction} disabled={isApprovePending}>
                 {isApprovePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
@@ -184,8 +184,6 @@ const LiqStaking = () => {
             </Tippy>
           </>
         );
-      case "deposit":
-      case "withdraw":
       case "both":
         return (
           <>
@@ -196,7 +194,7 @@ const LiqStaking = () => {
                 placeholder="$Carlo Balance"
                 value={fcknBalance}
                 type="number"
-                onChange={e => setFcknBalance(Number(e.target.value))}
+                onChange={e => setFcknBalance(Number(e.target.value).toFixed(3))}
               />
               <Tippy className="relative" content={<span>Deposit</span>}>
                 <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
@@ -211,7 +209,7 @@ const LiqStaking = () => {
                 placeholder="$xFCKN Balance"
                 value={xFcknBalance}
                 type="number"
-                onChange={e => setXFcknBalance(Number(e.target.value))}
+                onChange={e => setXFcknBalance(Number(e.target.value).toFixed(3))}
               />
               <Tippy className="relative" content={<span>Withdraw</span>}>
                 <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>

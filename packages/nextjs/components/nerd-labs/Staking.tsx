@@ -196,7 +196,7 @@ const Staking = () => {
                 <button
                   className="color-blue-500 border-e-rose-200 border-2 bg-[url(/addLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
                   onClick={() => {
-                    setOptIndex(0);
+                    setOptIndex(1);
                   }}
                 />
               </Tippy>
@@ -204,7 +204,7 @@ const Staking = () => {
                 <button
                   className="color-blue-500 border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
                   onClick={() => {
-                    setOptIndex(1);
+                    setOptIndex(2);
                   }}
                 />
               </Tippy>
