@@ -33,18 +33,18 @@ p {
 
 @layer base {
   @font-face {
-    font-family: "Satoshi";
+    font-family: 'Satoshi';
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url(/Satoshi-Regular.ttf) format("ttf");
+    src: url('/Satoshi-Regular.ttf') format('truetype');
   }
-   {
+  @font-face {
     font-family: "Twist";
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url(/Twist-Regular.otf) format("otf");
+    src: url(/Twist-Regular.otf) format("opentype");
   }
 }
 

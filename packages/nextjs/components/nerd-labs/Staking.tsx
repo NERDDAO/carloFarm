@@ -60,7 +60,8 @@ const Staking = () => {
     unstake.contractName,
   );
 
-  const handleStakeFunction = async () => {
+
+  const handleStakeFunction = async (onDepositSuccess: () => void) => {
     try {
       await writeStake(
         {
@@ -71,6 +72,7 @@ const Staking = () => {
         {
           onBlockConfirmation: txnReceipt => {
             console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            onDepositSuccess(); // Call the callback after successful deposit
           },
         },
       );
@@ -98,10 +100,12 @@ const Staking = () => {
     }
   };
 
-  const optts = ["deposit", "withdraw", "approve"];
+  const optts = ["approve", "deposit", "withdraw", ];
 
   const functionRender = () => {
     switch (optts[optIndex]) {
+      case "approve":
+        return <FarmApprove onApproveSuccess={() => setOptIndex(1)} />;
       case "deposit":
         return (
           <>
@@ -122,9 +126,9 @@ const Staking = () => {
               onChange={e => setFcknBalance(Number(e.target.value))}
             />
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
-              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
-                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
-              </button>
+            <button className="btn btn-primary" onClick={() => handleStakeFunction(() => setOptIndex(optts.indexOf("withdraw")))} disabled={isStakePending}>
+        {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+      </button>
             </Tippy>
           </>
         );
@@ -152,8 +156,7 @@ const Staking = () => {
           </>
         );
 
-      case "approve":
-        return <FarmApprove />;
+     
       default:
         return <div>default</div>;
     }
@@ -175,7 +178,7 @@ const Staking = () => {
         style={modalStyles}
       >
         <div class="card w-96 bg-base-100 shadow-xl">
-          <strong className="card-title">$Carlo LP Farming</strong>
+          <strong className="card-title">$Carlo Liquid Staking</strong>
           <div class="card-body">{functionRender()}</div>
           <br />
 

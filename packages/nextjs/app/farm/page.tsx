@@ -8,9 +8,9 @@ import type { NextPage } from "next";
 // optional
 import Modal from "react-modal";
 import "tippy.js/dist/tippy.css";
-import LiqStaking from "~~/components/nerd-labs/LiqStaking.tsx";
-import Staking from "~~/components/nerd-labs/Staking.tsx";
-import Player from "~~/components/nerd-labs/YtPlayer.tsx";
+import LiqStaking from "~~/components/nerd-labs/LiqStaking";
+import Staking from "~~/components/nerd-labs/Staking";
+import Player from "~~/components/nerd-labs/YtPlayer";
 
 const Farm: NextPage = () => {
   const modalStyles = {
