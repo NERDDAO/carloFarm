@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FarmEarnings from "./FarmEarnings";
 import FarmApprove from "./farmApprove";
 import Tippy from "@tippyjs/react";
@@ -34,6 +34,23 @@ const Staking = () => {
     functionName: "balanceOf",
     args: [account.address],
   });
+  const approval = useScaffoldReadContract({
+    contractName: "fcknToken",
+    functionName: "allowance",
+    args: [account.address, stakingPool],
+  });
+  useEffect(() => {
+    const checkApproval = async () => {
+      const allowance = Number(approval.data);
+      if (allowance > 0) {
+        setOptIndex(1); 
+      } else {
+        setOptIndex(0); 
+      }
+    };
+    checkApproval();
+  }, [approval.data]); 
+
   const stakedBalance = useScaffoldReadContract({
     contractName: "xStakingPool",
     functionName: "balanceOf",
