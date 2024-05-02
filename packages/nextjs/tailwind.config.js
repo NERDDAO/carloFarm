@@ -48,11 +48,11 @@ module.exports = {
           accent: "#3029ff",
           "accent-content": "#212638",
           neutral: "#131313",
-          "neutral-content": "#f6f6f6",
-          "base-100": "#f6f6f6",
-          "base-200": "#f4f8ff",
+          "neutral-content": "#3029ff",
+          "base-100": "#DAE8FF",
+          "base-200": "#DAE8FF",
           "base-300": "#DAE8FF",
-          "base-content": "#131313",
+          "base-content": "#3029ff",
           info: "#3029ff",
           success: "#34EEB6",
           warning: "#FFCF72",
@@ -75,9 +75,9 @@ module.exports = {
   },
   theme: {
     extend: {
-      fontFamily: { 
-        satoshi: ['Satoshi', 'sans-serif'],
-        twist: ['Twist', 'sans-serif'] 
+      fontFamily: {
+        satoshi: ["Satoshi", "sans-serif"],
+        twist: ["Twist", "sans-serif"],
       },
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",

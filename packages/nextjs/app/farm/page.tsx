@@ -98,12 +98,12 @@ const Farm: NextPage = () => {
   };
 
   return (
-    <div className="flex flex-col top-0 left-0 justify-center items-center content-center">
+    <div className="flex flex-col top-0 left-0 justify-center items-center content-center font-satoshi text-[#3029ff]">
       <h1 className="text-center">
         <Image src="/carlogo.png" alt="logo" className="" width={300} height={300} />
       </h1>
 
-      <div className="absolute top-24 left-1/5 transform translate-x-28 h-[100%] w-[100%] flex flex-row">
+      <div className="font-satoshi text-[#3029ff] absolute top-24 left-1/5 transform translate-x-28 h-[100%] w-[100%] flex flex-row">
         <Staking />
         <LiqStaking />
         <Links />

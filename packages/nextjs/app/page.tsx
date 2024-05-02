@@ -19,28 +19,11 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <h1 className="relative text-center font-satoshi -top-2">
-          FARM FARM
+      <div className="flex items-center flex-col flex-grow pt-10 font-satoshi text-[#3029ff]">
+        <h1 className="relative text-center  -top-2">
           <Image src="/carlogo.png" alt="logo" className="flex justify-center items-center" width={300} height={300} />
         </h1>
         <div className="flex flex-row items-center">
-          {/* <Image src="/sideEye.png" alt="logo" className="relative max-w-[50%] left-[50%] ml-[25%] mt-20" fill>
-            <Link
-              href="/farm"
-              onClick={() => {
-                console.log("clicked");
-              }}
-              className="absolute text-white p-2 rounded-lg cursor-pointer bottom-20 left-30 ml-52"
-            >
-              <Image
-                src="/carloAnus.png"
-                alt="Carlo anus"
-                width={50}
-                height={30}
-              />
-            </Link>
-          </Image> */}
           <div className="relative max-w-[50%] ">
             <Image
               src="/sideEye.png"
@@ -55,7 +38,7 @@ const Home: NextPage = () => {
               onClick={() => {
                 console.log("clicked");
               }}
-              className="absolute mt-[-26%] ml-[36.15%] width-[10px] z-10 block"
+              className="absolute mt-[-25.5%] ml-[36.50%] width-[10px] z-10 block"
             >
               <Image
                 src="/carloAnus.png"

@@ -43,10 +43,13 @@ function FarmEarnings(address: string) {
   }, [lastRewardAmount, totalSupply]);
 
   return (
-    <div style={{ color: "#ff00ff", display: "inline-table" }}>
-      <h3>Contract Stats</h3>
+    <div className="font-twist text-[#3029ff] card p-4">
+      <h1 className="text-2xl">Contract Stats</h1>
       <p>Total Supply Staked: {totalSupply ? (Number(totalSupply) / 10 ** 18).toFixed(2) : null}</p>
       <p>Monthly Interest per Token: {monthlyInterest ? (monthlyInterest * 10 ** 18 * 100).toFixed(6) : null}%</p>
+      <a className="text-xs text-blue-500" href={`https://basescan.org/token/${address}`} target="_blank">
+        View in BaseScan
+      </a>
     </div>
   );
 }

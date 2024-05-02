@@ -17,6 +17,8 @@ const LiqStaking = () => {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
+      background: "transparent",
+      border: "none",
     },
   };
 
@@ -194,7 +196,7 @@ const LiqStaking = () => {
                 placeholder="$Carlo Balance"
                 value={fcknBalance}
                 type="number"
-                onChange={e => setFcknBalance(Number(e.target.value).toFixed(3))}
+                onChange={e => setFcknBalance(Number(e.target.value))}
               />
               <Tippy className="relative" content={<span>Deposit</span>}>
                 <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
@@ -209,7 +211,7 @@ const LiqStaking = () => {
                 placeholder="$xFCKN Balance"
                 value={xFcknBalance}
                 type="number"
-                onChange={e => setXFcknBalance(Number(e.target.value).toFixed(3))}
+                onChange={e => setXFcknBalance(Number(e.target.value))}
               />
               <Tippy className="relative" content={<span>Withdraw</span>}>
                 <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
@@ -239,8 +241,8 @@ const LiqStaking = () => {
         contentLabel="Exercise Completed"
         style={modalStyles}
       >
-        <div class="card w-96 bg-base-100 shadow-xl">
-          <strong className="card-title">$Carlo LP Farming</strong>
+        <div class="card w-96 bg-base-100 shadow-xl font-satoshi text-[#3029ff] p-6">
+          <div className="card-title font-satoshi text-3xl">FARM</div>
           <div class="card-body">{liquidityFunctionRender()}</div>
           <br />
           balance: {(Number(balance.data) * 1e-18).toFixed(3)} {currentFarm.name}
@@ -271,31 +273,15 @@ const LiqStaking = () => {
             {Number(stakedBalance.data) !== 0 && (
               <Tippy className="relative" content={<span>Claim $Carlo Earnings</span>}>
                 <button
-                  className="color-blue-500 border-e-rose-200 border-2 bg-[url(/liquidity.png)] bg-contain bg-no-repeat h-[75px] w-[50px]"
+                  className="color-blue-500 border-e-rose-200 border-2 pr-3 mb-2 mr-2 h-[25px] w-[50px]"
                   onClick={() => {
                     claim.write();
                   }}
-                />
+                >
+                  Claim
+                </button>
               </Tippy>
             )}
-            <div className="flex flex-row space-x-4">
-              <Tippy className="relative" content={<span>Stake $Carlo</span>}>
-                <button
-                  className="color-blue-500 border-e-rose-200 border-2 bg-[url(/addLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                  onClick={() => {
-                    setOptIndex(1);
-                  }}
-                />
-              </Tippy>
-              <Tippy className="relative" content={<span>Withdraw $Carlo Liquidity</span>}>
-                <button
-                  className="color-blue-500 border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]"
-                  onClick={() => {
-                    setOptIndex(2);
-                  }}
-                />
-              </Tippy>
-            </div>
           </div>
         </div>
       </Modal>
