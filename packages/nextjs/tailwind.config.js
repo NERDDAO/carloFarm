@@ -74,8 +74,11 @@ module.exports = {
     ],
   },
   theme: {
-    fontFamily: { body: ["Satoshi"], display: ["Twist"] },
     extend: {
+      fontFamily: { 
+        satoshi: ['Satoshi', 'sans-serif'],
+        twist: ['Twist', 'sans-serif'] 
+      },
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
       },

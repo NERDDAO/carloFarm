@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10 ">
-        <h1 className="relative text-center font-['Satoshi'] -top-2">
+        <h1 className="relative text-center font-satoshi -top-2">
           FARM FARM
           <Image src="/carlogo.png" alt="logo" className="flex justify-center items-center" width={300} height={300} />
         </h1>
