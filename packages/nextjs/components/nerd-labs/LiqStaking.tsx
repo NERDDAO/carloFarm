@@ -8,6 +8,8 @@ import { useAccount } from "wagmi";
 import FarmApprove from "~~/components/nerd-labs/farmApprove";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
+// Adjust the type definition to include the dynamic types
+
 const LiqStaking = () => {
   const modalStyles = {
     content: {
@@ -33,6 +35,8 @@ const LiqStaking = () => {
       pool: "0x3FdC7fEf77208Aaac44E81bA982a9855642411D2",
     },
   ];
+  type ContractName = "$Carlo/$WETH" | "wethStakingPool" | typeof currentFarm.poolName;
+
   const [farmIndex, setFarmIndex] = useState(0);
   const currentFarm = farmList[farmIndex];
   //const [isUnstake, setIsUnstake] = useState(false);
@@ -62,10 +66,11 @@ const LiqStaking = () => {
     functionName: "balanceOf",
     args: [account.address],
   });
-  const claim = useScaffoldWriteContract({
+  const claim = {
     contractName: currentFarm.poolName,
     functionName: "getReward",
-  });
+  };
+
   const stake = {
     contractName: currentFarm.poolName,
     functionName: "stake",
@@ -83,6 +88,7 @@ const LiqStaking = () => {
     functionName: "withdraw",
     args: [BigInt(xFcknBalance * 1e18)],
   };
+
   const { writeContractAsync: writeApprove, isPending: isApprovePending } = useScaffoldWriteContract(
     approve.contractName,
   );
@@ -90,6 +96,10 @@ const LiqStaking = () => {
   const { writeContractAsync: writeStake, isPending: isStakePending } = useScaffoldWriteContract(stake.contractName);
 
   const { writeContractAsync: writeUnstake, isPending: isUnstakePending } = useScaffoldWriteContract(
+    unstake.contractName,
+  );
+
+  const { writeContractAsync: writeClaim, isPending: isClaiming } = useScaffoldWriteContract(
     unstake.contractName,
   );
 
@@ -149,6 +159,24 @@ const LiqStaking = () => {
     }
   };
 
+  const handleClaimFunction = async () => {
+    try {
+      await writeClaim(
+        {
+          functionName: claim.functionName,
+          args: claim.args,
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error(`"Error transacting ${claim.functionName} on ${claim.contractName}"`, e);
+    }
+  };
+
   useEffect(() => {
     if (!currentFarm) return;
     balance.refetch();
@@ -197,6 +225,7 @@ const LiqStaking = () => {
                 value={fcknBalance}
                 type="number"
                 onChange={e => setFcknBalance(Number(e.target.value))}
+                style={{ color: 'white' }}
               />
               <Tippy className="relative" content={<span>Deposit</span>}>
                 <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
@@ -212,6 +241,7 @@ const LiqStaking = () => {
                 value={xFcknBalance}
                 type="number"
                 onChange={e => setXFcknBalance(Number(e.target.value))}
+                style={{ color: 'white' }}
               />
               <Tippy className="relative" content={<span>Withdraw</span>}>
                 <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
@@ -245,20 +275,29 @@ const LiqStaking = () => {
           <div className="card-title font-satoshi text-3xl">FARM</div>
           <div class="card-body">{liquidityFunctionRender()}</div>
           <br />
-          balance: {(Number(balance.data) * 1e-18).toFixed(3)} {currentFarm.name}
+          $Carlo/$wETH LP Token Balance: {(Number(balance.data) * 1e-18).toFixed(3)}
           <br />
+          <span className="text-3x1">
+            <br />
+            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)}
+          </span>
           Earned: {(Number(earned.data) * 1e-18).toFixed(3)} $Carlo
           <br />
-          <span className="text-sm">
-            {" "}
-            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $CarloLP{" "}
-          </span>
-          <p className="flex flex-row ">
-            Options:{" "}
+          <Tippy className="relative" content={<span>Claim Rewards</span>}>
+            <button
+              className={`btn btn-primary ${isClaiming ? 'loading' : ''}`}
+              onClick={handleClaimFunction}
+              disabled={isClaiming}
+            >
+              {isClaiming ? 'Claiming...' : 'Claim Rewards'}
+            </button>
+            </Tippy>
+            {isClaiming ? <span className="loading loading-spinner loading-sm"></span> : ""}
+          <p className="flex flex-row">
+            Options: {" "}
             {farmList.map((farm, index) => {
               return (
-                <button className="border-e-emerald-200 border-2" key={index} onClick={() => setFarmIndex(index)}>
-                  {" "}
+                <button className="border-emerald-200 border-solid pl-2" key={index} onClick={() => setFarmIndex(index)}>
                   {farm.name}
                 </button>
               );
