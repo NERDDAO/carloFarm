@@ -146,6 +146,7 @@ const Staking = () => {
                 value={fcknBalance}
                 type="number"
                 onChange={e => setFcknBalance(Number(e.target.value))}
+                style={{ color: 'white' }}
               />
             </div>
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
