@@ -60,7 +60,6 @@ const Staking = () => {
     unstake.contractName,
   );
 
-
   const handleStakeFunction = async (onDepositSuccess: () => void) => {
     try {
       await writeStake(
@@ -100,7 +99,7 @@ const Staking = () => {
     }
   };
 
-  const optts = ["approve", "deposit", "withdraw", ];
+  const optts = ["approve", "deposit", "withdraw"];
 
   const functionRender = () => {
     switch (optts[optIndex]) {
@@ -126,9 +125,13 @@ const Staking = () => {
               onChange={e => setFcknBalance(Number(e.target.value))}
             />
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
-            <button className="btn btn-primary" onClick={() => handleStakeFunction(() => setOptIndex(optts.indexOf("withdraw")))} disabled={isStakePending}>
-        {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
-      </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleStakeFunction(() => setOptIndex(optts.indexOf("withdraw")))}
+                disabled={isStakePending}
+              >
+                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+              </button>
             </Tippy>
           </>
         );
@@ -156,7 +159,6 @@ const Staking = () => {
           </>
         );
 
-     
       default:
         return <div>default</div>;
     }

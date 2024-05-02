@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { ethers } from 'ethers';
-import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth/';
-import externalContracts from '../../contracts/externalContracts';
+import { useState } from "react";
+import externalContracts from "../../contracts/externalContracts";
+import { ethers } from "ethers";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth/";
 
 interface Erc20FarmApproveProps {
   onApproveSuccess: () => void;
@@ -18,7 +18,7 @@ function Erc20FarmApprove({ onApproveSuccess }: Erc20FarmApproveProps) {
   const handleApprove = async () => {
     // Constructing the variables parameter correctly
     const variables = {
-      functionName: 'approve' as const, // Explicitly typing as a literal type
+      functionName: "approve" as const, // Explicitly typing as a literal type
       args: [spender as string, amount] as const,
     };
 
@@ -30,8 +30,8 @@ function Erc20FarmApprove({ onApproveSuccess }: Erc20FarmApproveProps) {
 
   return (
     <button className="btn btn-primary" onClick={handleApprove} disabled={isMining}>
-    {isMining ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
-  </button>
+      {isMining ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
+    </button>
   );
 }
 

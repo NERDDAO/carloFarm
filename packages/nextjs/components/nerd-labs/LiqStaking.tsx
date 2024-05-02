@@ -155,7 +155,7 @@ const LiqStaking = () => {
     earned.refetch();
   }, [currentFarm, account.address]);
 
-  const optts = ["selector", "approve", "deposit", "withdraw" ];
+  const optts = ["selector", "approve", "deposit", "withdraw"];
 
   useEffect(() => {
     const checkApproval = async () => {
@@ -166,9 +166,9 @@ const LiqStaking = () => {
         setOptIndex(optts.indexOf("approve"));
       }
     };
-    
-  checkApproval();
-}, [approval.data, optts]);
+
+    checkApproval();
+  }, [approval.data, optts]);
 
   const liquidityFunctionRender = () => {
     switch (optts[optIndex]) {
