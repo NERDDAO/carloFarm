@@ -689,7 +689,7 @@ const externalContracts = {
       ],
     },
     fcknToken: {
-      address: "0x38d513Ec43ddA20f323f26c7bef74c5cF80b6477",
+      address: "0x38d513ec43dda20f323f26c7bef74c5cf80b6477",
       abi: [
         {
           inputs: [

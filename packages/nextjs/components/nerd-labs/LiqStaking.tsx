@@ -156,7 +156,7 @@ const LiqStaking = () => {
     earned.refetch();
   }, [currentFarm, account.address]);
 
-  const optts = ["selector", "deposit", "withdraw", "approve"];
+  const optts = ["selector", "approve", "deposit", "withdraw" ];
 
   const liquidityFunctionRender = () => {
     switch (optts[optIndex]) {
@@ -177,7 +177,7 @@ const LiqStaking = () => {
       case "deposit":
         return (
           <>
-            <strong>$Carlo LP Farming</strong>
+            <strong></strong>
             <span className="text-sm">
               Balance: {(Number(balance?.data) * 1e-18).toFixed(3)} {currentFarm.name}{" "}
             </span>

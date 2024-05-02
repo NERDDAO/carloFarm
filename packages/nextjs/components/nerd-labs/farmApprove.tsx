@@ -1,25 +1,38 @@
-import { ethers } from "ethers";
-import { useContractWrite } from "wagmi";
-import externalContracts from "~~/contracts/externalContracts";
+import { useState } from 'react';
+import { ethers } from 'ethers';
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth/';
+import externalContracts from '../../contracts/externalContracts';
 
-function FarmApprove() {
+interface Erc20FarmApproveProps {
+  onApproveSuccess: () => void;
+}
+
+function Erc20FarmApprove({ onApproveSuccess }: Erc20FarmApproveProps) {
+  const contractName = "fcknToken";
   const spender = externalContracts[8453].xStakingPool.address;
-  const amount = ethers.MaxUint256.toString();
+  const amount = ethers.MaxUint256;
 
-  const { writeAsync } = useContractWrite({
-    address: externalContracts[8453].fcknToken.address,
-    abi: externalContracts[8453].fcknToken.abi,
-    functionName: "approve",
-    args: [spender, BigInt(amount)],
-  });
+  // Adjusted to match the expected hook usage
+  const { writeContractAsync, isMining } = useScaffoldWriteContract(contractName);
 
   const handleApprove = async () => {
-    if (writeAsync) {
-      await writeAsync();
+    // Constructing the variables parameter correctly
+    const variables = {
+      functionName: 'approve' as const, // Explicitly typing as a literal type
+      args: [spender as string, amount] as const,
+    };
+
+    if (writeContractAsync) {
+      await writeContractAsync(variables);
+      onApproveSuccess();
     }
   };
 
-  return <button onClick={handleApprove}>Just $FCKN Approve</button>;
+  return (
+    <button className="btn btn-primary" onClick={handleApprove} disabled={isMining}>
+    {isMining ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
+  </button>
+  );
 }
 
-export default FarmApprove;
+export default Erc20FarmApprove;
