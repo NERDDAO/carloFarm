@@ -26,9 +26,9 @@ const LiqStaking = () => {
   const farmList: FarmProps[] = [
     {
       name: "$Carlo/$WETH",
-      address: "0x3FdC7fEf77208Aaac44E81bA982a9855642411D2",
+      address: "0x53f64cde28dd3caef17e701593b4ad7a95f0f61c",
       poolName: "wethStakingPool",
-      pool: "0x53f64cde28dd3caef17e701593b4ad7a95f0f61c",
+      pool: "0x3FdC7fEf77208Aaac44E81bA982a9855642411D2",
     },
   ];
   const [farmIndex, setFarmIndex] = useState(0);
@@ -116,7 +116,6 @@ const LiqStaking = () => {
         {
           functionName: stake.functionName,
           args: stake.args,
-          value: stake.value ? parseEther(stake.value) : "",
         },
         {
           onBlockConfirmation: txnReceipt => {
@@ -158,83 +157,75 @@ const LiqStaking = () => {
 
   const optts = ["selector", "approve", "deposit", "withdraw" ];
 
+  useEffect(() => {
+    const checkApproval = async () => {
+      // Assuming approval.data is the allowance amount
+      // You might need to convert it from a BigNumber depending on your setup
+      const allowance = Number(approval.data);
+      if (allowance > 0) {
+        // User has already approved, so we can skip directly to deposit
+        setOptIndex(optts.indexOf("deposit"));
+      } else {
+        // User has not approved yet
+        setOptIndex(optts.indexOf("approve"));
+      }
+    };
+    
+  checkApproval();
+}, [approval.data, optts]);
+
   const liquidityFunctionRender = () => {
     switch (optts[optIndex]) {
-      case "selector":
-        return (
-          <div className="flex flex-row">
-            <div className="flex flex-col items-center space-y-2 ">
-              {Number(approval.data) == 0 && (
-                <Tippy className="relative" content={<span>Approve $FCKN 🍗 Tokens</span>}>
-                  <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
-                    {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
-                  </button>
-                </Tippy>
-              )}
-            </div>
-          </div>
-        );
-      case "deposit":
-        return (
-          <>
-            <strong></strong>
-            <span className="text-sm">
-              Balance: {(Number(balance?.data) * 1e-18).toFixed(3)} {currentFarm.name}{" "}
-            </span>
-
-            <label className="cursor-pointer" onClick={() => setFcknBalance(Number(balance.data) * 1e-18 || 0)}>
-              max
-            </label>
-            <input
-              className="border-2"
-              placeholder="$Carlo Balance"
-              value={fcknBalance}
-              type="number"
-              onChange={e => setFcknBalance(Number(e.target.value))}
-            />
-
-            <Tippy className="relative" content={<span>STAKE</span>}>
-              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
-                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
-              </button>
-            </Tippy>
-          </>
-        );
-      case "withdraw":
-        return (
-          <>
-            <strong>$Carlo LP unStaking</strong>
-            <span className="text-sm">$Carlo Balance: {(Number(balance.data) * 10e-18).toFixed(3)} $FCKN</span>
-
-            <label onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)} className="cursor-pointer">
-              max
-            </label>
-            <input
-              className="border-2"
-              placeholder="$xFCKN Balance"
-              value={xFcknBalance}
-              type="number"
-              onChange={e => setXFcknBalance(Number(e.target.value))}
-            />
-            <Tippy className="relative" content={<span> WITHDRAW</span>}>
-              <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
-                {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
-              </button>
-            </Tippy>
-          </>
-        );
-
       case "approve":
         return (
           <>
             <strong>Carlo Approve</strong>
             <span className="text-sm">$Carlo LP Balance: {(Number(balance.data) * 10e-18).toFixed(3)} UniV2</span>
-
-            <Tippy className="relative" content={<span> WITHDRAW</span>}>
+            <Tippy className="relative" content={<span>Approve</span>}>
               <button className="btn btn-primary" onClick={handleApproveFunction} disabled={isApprovePending}>
                 {isApprovePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
               </button>
             </Tippy>
+          </>
+        );
+      case "deposit":
+      case "withdraw":
+      case "both": // New case to handle showing both options
+        return (
+          <>
+            {/* Deposit UI */}
+            <div>
+              <strong>Deposit $Carlo</strong>
+              <input
+                className="border-2"
+                placeholder="$Carlo Balance"
+                value={fcknBalance}
+                type="number"
+                onChange={e => setFcknBalance(Number(e.target.value))}
+              />
+              <Tippy className="relative" content={<span>Deposit</span>}>
+                <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
+                  {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+                </button>
+              </Tippy>
+            </div>
+  
+            {/* Withdraw UI */}
+            <div>
+              <strong>Withdraw $Carlo</strong>
+              <input
+                className="border-2"
+                placeholder="$xFCKN Balance"
+                value={xFcknBalance}
+                type="number"
+                onChange={e => setXFcknBalance(Number(e.target.value))}
+              />
+              <Tippy className="relative" content={<span>Withdraw</span>}>
+                <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
+                  {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
+                </button>
+              </Tippy>
+            </div>
           </>
         );
       default:

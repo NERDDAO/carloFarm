@@ -61,7 +61,7 @@ const Staking = () => {
   );
 
 
-  const handleStakeFunction = async () => {
+  const handleStakeFunction = async (onDepositSuccess: () => void) => {
     try {
       await writeStake(
         {
@@ -72,6 +72,7 @@ const Staking = () => {
         {
           onBlockConfirmation: txnReceipt => {
             console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+            onDepositSuccess(); // Call the callback after successful deposit
           },
         },
       );
@@ -125,9 +126,9 @@ const Staking = () => {
               onChange={e => setFcknBalance(Number(e.target.value))}
             />
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
-              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
-                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
-              </button>
+            <button className="btn btn-primary" onClick={() => handleStakeFunction(() => setOptIndex(optts.indexOf("withdraw")))} disabled={isStakePending}>
+        {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+      </button>
             </Tippy>
           </>
         );
