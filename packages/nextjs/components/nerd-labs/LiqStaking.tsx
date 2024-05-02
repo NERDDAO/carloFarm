@@ -275,7 +275,7 @@ const LiqStaking = () => {
           <div className="card-title font-satoshi text-3xl">FARM</div>
           <div class="card-body">{liquidityFunctionRender()}</div>
           <br />
-          $Carlo/$wETH LP Token Balance: {(Number(balance.data) * 1e-18).toFixed(3)}
+          $Carlo/$wETH LP Balance: {(Number(balance.data) * 1e-18).toFixed(3)}
           <br />
           <span className="text-3x1">
             <br />
