@@ -251,7 +251,7 @@ const LiqStaking = () => {
           <br />
           <span className="text-sm">
             {" "}
-            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $CarloLP{" "}
+            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $CarloLP{" "}
           </span>
           <p className="flex flex-row ">
             Options:{" "}
