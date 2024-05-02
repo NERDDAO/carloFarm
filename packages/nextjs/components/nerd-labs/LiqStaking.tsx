@@ -159,14 +159,10 @@ const LiqStaking = () => {
 
   useEffect(() => {
     const checkApproval = async () => {
-      // Assuming approval.data is the allowance amount
-      // You might need to convert it from a BigNumber depending on your setup
       const allowance = Number(approval.data);
       if (allowance > 0) {
-        // User has already approved, so we can skip directly to deposit
         setOptIndex(optts.indexOf("deposit"));
       } else {
-        // User has not approved yet
         setOptIndex(optts.indexOf("approve"));
       }
     };
@@ -190,10 +186,9 @@ const LiqStaking = () => {
         );
       case "deposit":
       case "withdraw":
-      case "both": // New case to handle showing both options
+      case "both":
         return (
           <>
-            {/* Deposit UI */}
             <div>
               <strong>Deposit $Carlo</strong>
               <input
@@ -209,8 +204,6 @@ const LiqStaking = () => {
                 </button>
               </Tippy>
             </div>
-  
-            {/* Withdraw UI */}
             <div>
               <strong>Withdraw $Carlo</strong>
               <input
@@ -258,7 +251,7 @@ const LiqStaking = () => {
           <br />
           <span className="text-sm">
             {" "}
-            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $Carlo{" "}
+            Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $CarloLP{" "}
           </span>
           <p className="flex flex-row ">
             Options:{" "}
@@ -278,7 +271,7 @@ const LiqStaking = () => {
           <div className="card-actions justify-end">
             {" "}
             {Number(stakedBalance.data) !== 0 && (
-              <Tippy className="relative" content={<span>Claim $Carlo</span>}>
+              <Tippy className="relative" content={<span>Claim $Carlo Earnings</span>}>
                 <button
                   className="color-blue-500 border-e-rose-200 border-2 bg-[url(/liquidity.png)] bg-contain bg-no-repeat h-[75px] w-[50px]"
                   onClick={() => {
