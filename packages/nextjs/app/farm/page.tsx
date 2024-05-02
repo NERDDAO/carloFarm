@@ -103,7 +103,7 @@ const Farm: NextPage = () => {
         <Image src="/carlogo.png" alt="logo" className="" width={300} height={300} />
       </h1>
 
-      <div className="absolute top-0 left-1/5 transform translate-x-28 h-[100%] w-[100%] flex flex-row">
+      <div className="absolute top-24 left-1/5 transform translate-x-28 h-[100%] w-[100%] flex flex-row">
         <Staking />
         <LiqStaking />
         <Links />
