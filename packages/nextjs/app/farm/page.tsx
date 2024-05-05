@@ -10,7 +10,6 @@ import Modal from "react-modal";
 import "tippy.js/dist/tippy.css";
 import LiqStaking from "~~/components/nerd-labs/LiqStaking";
 import Staking from "~~/components/nerd-labs/Staking";
-import Player from "~~/components/nerd-labs/YtPlayer";
 
 const Farm: NextPage = () => {
   const modalStyles = {
@@ -29,8 +28,6 @@ const Farm: NextPage = () => {
 
     return (
       <div className="p-6">
-        <Player />
-
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
@@ -39,33 +36,40 @@ const Farm: NextPage = () => {
         >
           <div className="flex flex-col items-center text-justify">
             <h3>
-              Welcome to the... <br />
-              <strong className="underline-offset-1 underline text-xl">
-                FRIED CHICKEN $FCKN 🍗
-                <br /> Farm to table Experience
-              </strong>
+              Welcome... <br />
+              <span className="underline-offset-1 underline text-2xl font-twist">
+                CARLO LP FARM
+                <br />
+              </span>
             </h3>
-            <p className="text-center">
-              Indulge in the ULTIMATE <strong>$FCKN 🍗</strong> yield farming frenzy.
-              <br />
-              COMMUNITY LED<strong className="underline-offset-1 underline"> FARM FACTORY</strong>
-              <br />
+            <p className="text-center font-satoshi">
+              Dive into the ULTIMATE <strong>$Carlo</strong>
+              <br /> yield farming experience. <br />
               <strong className="underline-offset-1 underline">HIGH APR POOLS</strong>, <br />
-              Pair your <strong className="underline-offset-1 underline">$DEGEN </strong>
-              tokens with our <br />
-              <strong className="underline-offset-1 underline">RUG-PULL PROOF </strong>
-              liquidity pools! <br />
-              New adrenaline-pumping opportunities
-              <br /> every <strong className="underline-offset-1 underline">$FCKN 🍗 Friday</strong>
+              Select between Single and LP staking!
+              <br />
+              <span className="underline-offset-1 underline font-twist text-2xl">How to use:</span>
+              <ul>
+                <li>
+                  Buy $Carlo
+                  <br />
+                </li>
+                <li>
+                  Add Liquidity
+                  <br />
+                </li>
+
+                <li>
+                  Stake your LP tokens
+                  <br />
+                </li>
+                <li>
+                  Claim Rewards!
+                  <br />
+                </li>
+              </ul>
             </p>
-            <button
-              className="btn"
-              onClick={() => {
-                setModalIsOpen(false);
-              }}
-            >
-              Enjoy
-            </button>{" "}
+            <Links />
           </div>
         </Modal>
       </div>
@@ -74,26 +78,23 @@ const Farm: NextPage = () => {
 
   const Links = () => {
     return (
-      <>
+      <div className="flex flex-row">
         <a
           className=""
-          href="https://app.uniswap.org/swap?outputcurrency=0x7d12aeb5d96d221071d176980d23c213d88d9998&chain=base"
+          href="https://app.uniswap.org/swap?outputcurrency=0x38d513Ec43ddA20f323f26c7bef74c5cF80b6477&chain=base"
           target="_blank"
         >
-          <Tippy content={<span>Buy $FCKN 🍗</span>}>
-            <div className="bg-[url(/shaker.png)] bg-contain bg-no-repeat relative -top-1/3 sm:-mt-12 sm:-ml-32 md:-mt-10 lg:-mt-16 lg:-ml-16 2xl:-mt-12 md:-ml-32 2xl:ml-4 left-52 h-1/4 w-32 cursor-pointer transform origin-bottom-left hover:scale-110" />
+          <Tippy content={<span>Buy Carlo</span>}>
+            <div className="btn">Swap</div>
           </Tippy>
         </a>
 
-        <a
-          href="https://app.uniswap.org/swap?outputcurrency=0x7d12aeb5d96d221071d176980d23c213d88d9998&chain=base"
-          target="_blank"
-        >
-          <Tippy className="" content={<span>Add $FCKN 🍗 Liquidity</span>}>
-            <div className="bg-[url(/shaker.png)] bg-contain bg-no-repeat relative -top-2/3 lg:mt-16  md:mt-12 left-32 h-1/4 w-32 md:-ml-20 2xl:-ml-6 cursor-pointer transform origin-bottom-left hover:scale-110" />
+        <a href="https://app.uniswap.org/add/v2/ETH/0x38d513Ec43ddA20f323f26c7bef74c5cF80b6477" target="_blank">
+          <Tippy className="" content={<span>Add Carlo Liquidity</span>}>
+            <div className="btn">Pool</div>
           </Tippy>
         </a>
-      </>
+      </div>
     );
   };
 
@@ -103,10 +104,10 @@ const Farm: NextPage = () => {
         <Image src="/carlogo.png" alt="logo" className="" width={300} height={300} />
       </h1>
 
-      <div className="font-satoshi text-[#3029ff] absolute top-24 left-1/5 transform translate-x-28 h-[100%] w-[100%] flex flex-row">
+      <div className="font-satoshi text-[#3029ff] absolute top-24 left-8 transform h-[100%] w-[100%] flex flex-row">
         <Staking />
         <LiqStaking />
-        <Links />
+        <Content />
       </div>
     </div>
   );

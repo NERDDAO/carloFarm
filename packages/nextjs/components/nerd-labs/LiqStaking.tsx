@@ -215,7 +215,7 @@ const LiqStaking = () => {
       case "deposit":
         return (
           <>
-            <div>
+            <div className="card-body space-y-2 justify-end">
               <strong>Deposit $Carlo</strong>
               <input
                 className="border-2"
@@ -346,4 +346,3 @@ const LiqStaking = () => {
 };
 
 export default LiqStaking;
-
