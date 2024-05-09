@@ -45,28 +45,37 @@ const Farm: NextPage = () => {
             <p className="text-center font-satoshi">
               Dive into the ULTIMATE <strong>$Carlo</strong>
               <br /> yield farming experience. <br />
-              <strong className="underline-offset-1 underline">HIGH APR POOLS</strong>, <br />
+              <strong className="underline-offset-1 underline">MONTHLY HIGH APR POOLS</strong>, <br />
               Select between Single and LP staking!
+              <li>
+                xCarlo: Instantly accumulate rewards with no slippage
+                <br />
+              </li>
+              <li>
+                CARLO/WETH: Stake your LP tokens and earn $Carlo <br />
+              </li>
               <br />
-              <span className="underline-offset-1 underline font-twist text-2xl">How to use:</span>
-              <ul>
+              <span className="underline-offset-1 underline text-2xl font-twist">
+                FARM INFO
+                <br />
+              </span>
+              <ul className="">
                 <li>
-                  Buy $Carlo
-                  <br />
+                  Pool Yield:1,000,000 $Carlo/Month <br />
                 </li>
                 <li>
-                  Add Liquidity
-                  <br />
+                  Period Ending: block 1717893187 <br />
                 </li>
-
-                <li>
-                  Stake your LP tokens
-                  <br />
-                </li>
-                <li>
-                  Claim Rewards!
-                  <br />
-                </li>
+                <strong>
+                  <li>
+                    NO lockup period or penalties
+                    <br />
+                  </li>
+                  <li>
+                    Stake and Unstake anytime
+                    <br />
+                  </li>
+                </strong>
               </ul>
             </p>
             <Links />
@@ -104,7 +113,7 @@ const Farm: NextPage = () => {
         <Image src="/carlogo.png" alt="logo" className="" width={300} height={300} />
       </h1>
 
-      <div className="font-satoshi text-[#3029ff] absolute top-24 left-8 transform h-[100%] w-[100%] flex flex-row">
+      <div className="font-satoshi text-[#3029ff] absolute top-24 left-8 transform h-[100%] w-[100%] flex flex-col sm:flex-row">
         <Staking />
         <LiqStaking />
         <Content />

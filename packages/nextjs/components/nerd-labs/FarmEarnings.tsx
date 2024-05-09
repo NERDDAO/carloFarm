@@ -47,7 +47,11 @@ function FarmEarnings(address: string) {
       <h1 className="text-2xl">Contract Stats</h1>
       <p>Total Supply Staked: {totalSupply ? (Number(totalSupply) / 10 ** 18).toFixed(2) : null}</p>
       <p>Monthly Interest per Token: {monthlyInterest ? (monthlyInterest * 10 ** 18 * 100).toFixed(6) : null}%</p>
-      <a className="text-xs text-blue-500" href={`https://basescan.org/token/${address}`} target="_blank">
+      <a
+        className="text-xs text-blue-500"
+        href="https://basescan.org/token/0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005"
+        target="_blank"
+      >
         View in BaseScan
       </a>
     </div>

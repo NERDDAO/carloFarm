@@ -19,18 +19,18 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10 font-satoshi text-[#3029ff]">
+      <div className="flex items-center flex-col flex-grow pt-10 font-satoshi text-[#3029ff] container mx-auto ">
         <h1 className="relative text-center  -top-2">
           <Image src="/carlogo.png" alt="logo" className="flex justify-center items-center" width={300} height={300} />
         </h1>
         <div className="flex flex-row items-center">
-          <div className="relative max-w-[50%] ">
+          <div className="relative">
             <Image
               src="/sideEye.png"
               alt="logo"
               width={600}
               height={350}
-              className="relative mt-[-20%]"
+              className="relative mt-[-0%]"
               layout="responsive" //I am using layout that it's a legacy thing, I have to change it, but like that it works
             />
             <Link
@@ -45,7 +45,7 @@ const Home: NextPage = () => {
                 alt="Carlo anus"
                 width={5}
                 height={5}
-                className={`max-w-[10%] ${clicked ? "no-hover" : "pulse"}`}
+                className={`max-w-[20%] ${clicked ? "no-hover" : "pulse"}`}
                 onClick={handleClick}
                 layout="responsive" //I am using layout that it's a legacy thing, I have to change it, but like that it works
               />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FarmEarnings from "./FarmEarnings";
 import FarmApprove from "./farmApprove";
 import Tippy from "@tippyjs/react";
@@ -43,13 +43,13 @@ const Staking = () => {
     const checkApproval = async () => {
       const allowance = Number(approval.data);
       if (allowance > 0) {
-        setOptIndex(1); 
+        setOptIndex(1);
       } else {
-        setOptIndex(0); 
+        setOptIndex(0);
       }
     };
     checkApproval();
-  }, [approval.data]); 
+  }, [approval.data]);
 
   const stakedBalance = useScaffoldReadContract({
     contractName: "xStakingPool",
@@ -146,7 +146,7 @@ const Staking = () => {
                 value={fcknBalance}
                 type="number"
                 onChange={e => setFcknBalance(Number(e.target.value))}
-                style={{ color: 'white' }}
+                style={{ color: "white" }}
               />
             </div>
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
@@ -203,7 +203,9 @@ const Staking = () => {
         <div
           onClick={() => setModalIsOpen(true)}
           className="cursor-pointer bg-[url(/profile.png)] hover:bg-[url(/Vomiting.png)] bg-contain bg-no-repeat relative h-full w-full top-0 left-0"
-        />
+        >
+          <span className="absolute bottom-0  sm:left-52 md:left-80 font-twist text-2xl text-white">Staking</span>
+        </div>
       </Tippy>
 
       <Modal
@@ -213,7 +215,12 @@ const Staking = () => {
         style={modalStyles}
       >
         <div class="card w-96 bg-base-100 shadow-xl font-satoshi text-[#3029ff]">
-          <div class="card-body">{functionRender()}</div>
+          <div class="card-body">
+            {functionRender()}
+            <span onClick={() => setModalIsOpen(false)} className="absolute text-2xl font-twist right-4">
+              X
+            </span>
+          </div>
           <br />
 
           <FarmEarnings address={stakingPool} />
