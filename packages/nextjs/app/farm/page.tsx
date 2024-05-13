@@ -24,7 +24,7 @@ const Farm: NextPage = () => {
   };
 
   function Content(this: any) {
-    const [modalIsOpen, setModalIsOpen] = React.useState(true);
+    const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
     return (
       <div className="p-6">
@@ -35,49 +35,37 @@ const Farm: NextPage = () => {
           style={modalStyles}
         >
           <div className="flex flex-col items-center text-justify">
-            <h3>
-              Welcome... <br />
-              <span className="underline-offset-1 underline text-2xl font-twist">
-                CARLO LP FARM
-                <br />
-              </span>
-            </h3>
-            <p className="text-center font-satoshi">
-              Dive into the ULTIMATE <strong>$Carlo</strong>
-              <br /> yield farming experience. <br />
-              <strong className="underline-offset-1 underline">MONTHLY HIGH APR POOLS</strong>, <br />
-              Select between Single and LP staking!
-              <li>
-                xCarlo: Instantly accumulate rewards with no slippage
-                <br />
-              </li>
-              <li>
-                CARLO/WETH: Stake your LP tokens and earn $Carlo <br />
-              </li>
-              <br />
-              <span className="underline-offset-1 underline text-2xl font-twist">
-                FARM INFO
-                <br />
-              </span>
-              <ul className="">
-                <li>
-                  Pool Yield:1,000,000 $Carlo/Month <br />
-                </li>
-                <li>
-                  Period Ending: block 1717893187 <br />
-                </li>
-                <strong>
-                  <li>
-                    NO lockup period or penalties
+            <span onClick={() => setModalIsOpen(false)} className="cursor-pointer absolute text-2xl font-twist right-8">
+              X
+            </span>
+            <div class="stats shadow p-2">
+              <div className="flex flex-col">
+                <h3>
+                  Welcome... <br />
+                  <span className="underline-offset-1 underline text-2xl font-twist ">
+                    CARLO LP FARM
                     <br />
-                  </li>
-                  <li>
-                    Stake and Unstake anytime
-                    <br />
-                  </li>
-                </strong>
-              </ul>
-            </p>
+                  </span>
+                </h3>
+                <p className="font-satoshi p-2">
+                  Dive into the ULTIMATE <strong>$Carlo</strong>
+                  <br /> yield farming experience. <br />
+                  <strong className="underline-offset-1 underline">MONTHLY HIGH APR POOLS</strong>, <br />
+                  Select between Single and LP staking!
+                  <br />
+                </p>
+              </div>
+              <div class="stats">
+                <div class="stat-title text-accent"> Pool Yield:</div>
+                <div className="stat-value">1,000,000 $Carlo </div>
+                <div class="stat-title text-accent">Period Ending Block:</div>
+                <div className="stat-value">1717893187</div>
+                <div class="stat-desc text-accent"> NO lockup period or penalties</div>
+
+                <div class="stat-desc text-accent"> Stake and Unstake anytime</div>
+              </div>
+            </div>
+
             <Links />
           </div>
         </Modal>
@@ -113,10 +101,9 @@ const Farm: NextPage = () => {
         <Image src="/carlogo.png" alt="logo" className="" width={300} height={300} />
       </h1>
 
-      <div className="font-satoshi text-[#3029ff] absolute top-24 left-8 transform h-[100%] w-[100%] flex flex-col sm:flex-row">
+      <div className="font-satoshi text-[#3029ff] absolute top-32 left-8 transform h-[100%] w-[100%] flex flex-col sm:flex-row">
         <Staking />
         <LiqStaking />
-        <Content />
       </div>
     </div>
   );

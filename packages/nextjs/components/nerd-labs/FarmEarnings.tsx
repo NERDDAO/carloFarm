@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import externalContracts from "../../contracts/externalContracts";
-import { useContractRead } from "wagmi";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
-function FarmEarnings(address: string) {
+function FarmEarnings(props: { farmName: string; pricePerShare: number }) {
   const [lastRewardAmount, setLastRewardAmount] = useState<string | null>(null);
   const [totalSupply, setTotalSupply] = useState<string | null>(null);
   const [monthlyInterest, setMonthlyInterest] = useState<number | null>(null);
-
+  const { farmName, pricePerShare } = props;
   // Read the lastRewardAmount from the contract
-  const { data: lastRewardAmountData } = useContractRead({
-    address: address,
-    abi: externalContracts[8453].xStakingPool.abi,
+  const { data: lastRewardAmountData } = useScaffoldReadContract({
+    contractName: farmName,
     functionName: "lastRewardAmount",
   });
 
   // Read the totalSupply from the contract
-  const { data: totalSupplyData } = useContractRead({
-    address: address,
-    abi: externalContracts[8453].xStakingPool.abi,
+  const { data: totalSupplyData } = useScaffoldReadContract({
+    contractName: farmName,
     functionName: "totalSupply",
   });
+
+  console.log(farmName, lastRewardAmountData, totalSupplyData);
 
   useEffect(() => {
     if (lastRewardAmountData) {
@@ -34,19 +34,30 @@ function FarmEarnings(address: string) {
     if (lastRewardAmount && totalSupply) {
       // Convert string representations to numbers for calculation
       const rewardAmountNum = Number(lastRewardAmount);
-      const totalSupplyNum = Number(totalSupply);
+      const totalSupplyNum = Number(totalSupply) * pricePerShare;
 
       // Calculate monthly interest in tokens per staked token
-      const interestPerToken = rewardAmountNum / totalSupplyNum;
+      const interestPerToken = (rewardAmountNum / totalSupplyNum) * 100;
       setMonthlyInterest(interestPerToken);
     }
   }, [lastRewardAmount, totalSupply]);
 
   return (
-    <div className="font-twist text-[#3029ff] card p-4">
-      <h1 className="text-2xl">Contract Stats</h1>
-      <p>Total Supply Staked: {totalSupply ? (Number(totalSupply) / 10 ** 18).toFixed(2) : null}</p>
-      <p>Monthly Interest per Token: {monthlyInterest ? (monthlyInterest * 10 ** 18 * 100).toFixed(6) : null}%</p>
+    <div className="font-satoshi text-[#3029ff] card p-4">
+      <h1 className="text-2xl font-twist">Contract Stats</h1>
+      <div class="stats">
+        <div class="stat-title text-accent"> Total Supply Staked:</div>
+        <div className="stat-value">
+          {totalSupply ? (Number(totalSupply) * 1e-18 * pricePerShare * 1e-18).toFixed(2) : null}
+        </div>
+        <div class="stat-title text-accent">Monthly Interest per Token:</div>
+        <div className="stat-value">{monthlyInterest ? (monthlyInterest * 1e18).toFixed(3) : null}%</div>
+        <div class="stat-desc text-accent"> NO lockup period or penalties</div>
+
+        <div class="stat-desc text-accent"> Stake and Unstake anytime</div>
+      </div>
+      <p></p>
+      <p> </p>
       <a
         className="text-xs text-blue-500"
         href="https://basescan.org/token/0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005"

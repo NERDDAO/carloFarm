@@ -5,6 +5,7 @@ import Tippy from "@tippyjs/react";
 import Modal from "react-modal";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { decimalAdjust } from "~~/utils/nerd/utils";
 
 const Staking = () => {
   //const maxAmount = ethers.MaxUint256;
@@ -28,6 +29,7 @@ const Staking = () => {
   const [optIndex, setOptIndex] = useState(0);
   const [fcknBalance, setFcknBalance] = useState(0);
   const [xFcknBalance, setXFcknBalance] = useState(0);
+  const floor10 = (value, exp) => decimalAdjust("floor", value, exp);
 
   const balance = useScaffoldReadContract({
     contractName: "fcknToken",
@@ -126,27 +128,39 @@ const Staking = () => {
         return <FarmApprove onApproveSuccess={() => setOptIndex(1)} />;
       case "deposit":
         return (
-          <>
+          <div className="flex flex-col card-body">
             <span className="text-2xl font-twist">STAKING</span>
-            <span className="text-sm">$Carlo Balance: {(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</span>
+            <div class="stats">
+              <div class="stat-title text-accent"> $Carlo Balance:</div>
+              <div className="stat-value">{(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</div>
+              <div class="stat-title text-accent"> Staked $Carlo Balance: </div>
+              <div className="stat-value">
+                {" "}
+                {(Number(ppShare.data) * 1e-18 * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $Carlo{" "}
+              </div>
+              <div class="stat-desc text-accent">
+                {" "}
+                Price Per Share: {(Number(ppShare.data) * 1e-18).toFixed(3)} $Carlo{" "}
+              </div>
 
-            <span className="text-sm">
-              $xCarlo Balance: {(Number(ppShare.data) * 1e-18 * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $Carlo{" "}
-            </span>
+              <div class="stat-desc text-accent">
+                {" "}
+                xCarlo Shares {(Number(stakedBalance?.data) * 1e-18).toFixed(3)}{" "}
+              </div>
+            </div>
             <div className="flex flex-row">
               <label
                 className="cursor-pointer border-2"
-                onClick={() => setFcknBalance(Number(balance.data) * 1e-18 || 0)}
+                onClick={() => setFcknBalance(floor10(Number(balance.data) || 0, 3) * 1e-18)}
               >
                 MAX
               </label>
               <input
-                className="border-2"
+                className="border-2 text-accent"
                 placeholder="$Carlo"
                 value={fcknBalance}
                 type="number"
                 onChange={e => setFcknBalance(Number(e.target.value))}
-                style={{ color: "white" }}
               />
             </div>
             <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
@@ -158,38 +172,54 @@ const Staking = () => {
                 {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
               </button>
             </Tippy>
-          </>
+          </div>
         );
       case "withdraw":
         return (
-          <>
+          <div className="flex flex-col card-body">
             <span className="text-2xl font-twist">UNSTAKING</span>
-            <span className="text-sm">$Carlo Balance: {(Number(balance.data) * 1e-18).toFixed(3)} $Carlo</span>
-            <span className="text-sm"> $xCarlo Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $Carlo</span>
+            <div class="stats">
+              <div class="stat-title text-accent"> $Carlo Balance:</div>
+              <div className="stat-value">{(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</div>
+              <div class="stat-title text-accent"> Staked $Carlo Balance: </div>
+              <div className="stat-value">
+                {" "}
+                {(Number(ppShare.data) * 1e-18 * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $Carlo{" "}
+              </div>
+              <div class="stat-desc text-accent">
+                {" "}
+                Price Per Share: {(Number(ppShare.data) * 1e-18).toFixed(3)} $Carlo{" "}
+              </div>
 
+              <div class="stat-desc text-accent">
+                {" "}
+                xCarlo Shares {(Number(stakedBalance?.data) * 1e-18).toFixed(3)}{" "}
+              </div>
+            </div>
             <div className="flex flex-row">
-              {" "}
               <label
-                onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)}
                 className="cursor-pointer border-2"
+                onClick={() => {
+                  setXFcknBalance(floor10(Number(stakedBalance.data) || 0, 10) * 1e-18);
+                  console.log("max", floor10(Number(stakedBalance.data) || 0, 3) * 1e-18);
+                }}
               >
                 MAX
-              </label>{" "}
+              </label>
               <input
-                className="border-2"
-                placeholder="$xCarlo Balance"
-                value={Number(xFcknBalance)}
+                className="border-2 text-accent"
+                placeholder="$Carlo"
+                value={xFcknBalance}
                 type="number"
                 onChange={e => setXFcknBalance(Number(e.target.value))}
               />
             </div>
-
             <Tippy className="relative" content={<span>unWrap $Carlo</span>}>
               <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
                 {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
               </button>
             </Tippy>
-          </>
+          </div>
         );
 
       default:
@@ -214,16 +244,16 @@ const Staking = () => {
         contentLabel="Exercise Completed"
         style={modalStyles}
       >
-        <div class="card w-96 bg-base-100 shadow-xl font-satoshi text-[#3029ff]">
-          <div class="card-body">
+        <div class="card w-full  h-full bg-base-100 shadow-xl font-satoshi text-[#3029ff]">
+          <span onClick={() => setModalIsOpen(false)} className="cursor-pointer absolute text-2xl font-twist right-4">
+            X
+          </span>
+          <div class="card-body flex flex-row">
             {functionRender()}
-            <span onClick={() => setModalIsOpen(false)} className="absolute text-2xl font-twist right-4">
-              X
-            </span>
-          </div>
-          <br />
 
-          <FarmEarnings address={stakingPool} />
+            <FarmEarnings farmName="xStakingPool" pricePerShare={Number(ppShare.data)} />
+          </div>
+          <span className="ml-6 text-sm">Tip: xCarlo farms compound automatically!</span>{" "}
           <div className="card-actions justify-end p-2">
             <div className="flex flex-row space-x-4">
               <Tippy className="relative" content={<span>Wrap $Carlo</span>}>

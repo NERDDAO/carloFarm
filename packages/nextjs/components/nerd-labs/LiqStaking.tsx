@@ -7,6 +7,9 @@ import Modal from "react-modal";
 import { useAccount } from "wagmi";
 import FarmApprove from "~~/components/nerd-labs/farmApprove";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { decimalAdjust } from "~~/utils/nerd/utils";
+
+const floor10 = (value, exp) => decimalAdjust("floor", value, exp);
 
 // Adjust the type definition to include the dynamic types
 
@@ -74,7 +77,7 @@ const LiqStaking = () => {
   const stake = {
     contractName: currentFarm.poolName,
     functionName: "stake",
-    args: [BigInt(fcknBalance * 1e18)],
+    args: [BigInt(fcknBalance)],
   };
 
   const approve = {
@@ -86,7 +89,7 @@ const LiqStaking = () => {
   const unstake = {
     contractName: currentFarm.poolName,
     functionName: "withdraw",
-    args: [BigInt(xFcknBalance * 1e18)],
+    args: [BigInt(xFcknBalance)],
   };
 
   const { writeContractAsync: writeApprove, isPending: isApprovePending } = useScaffoldWriteContract(
@@ -202,7 +205,7 @@ const LiqStaking = () => {
     switch (optts[optIndex]) {
       case "approve":
         return (
-          <>
+          <div className="card-body">
             <strong>Carlo Approve</strong>
             <span className="text-sm">$Carlo LP Balance: {(Number(balance.data) * 1e-18).toFixed(3)} UniV2</span>
             <Tippy className="relative" content={<span>Approve</span>}>
@@ -210,50 +213,76 @@ const LiqStaking = () => {
                 {isApprovePending ? <span className="loading loading-spinner loading-sm"></span> : "Approve"}
               </button>
             </Tippy>
-          </>
+          </div>
         );
       case "deposit":
         return (
-          <>
-            <div className="card-body space-y-2 justify-end">
-              <strong>Deposit $Carlo</strong>
-              <input
-                className="border-2"
-                placeholder="$Carlo Balance"
-                value={fcknBalance}
-                type="number"
-                onChange={e => setFcknBalance(Number(e.target.value))}
-                style={{ color: "white" }}
-              />
-              <Tippy className="relative" content={<span>Deposit</span>}>
-                <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
-                  {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
-                </button>
-              </Tippy>
+          <div className="flex flex-col card-body">
+            <span className="text-2xl font-twist">UNSTAKING</span>
+            <div class="stats p-2">
+              <div class="stat-title text-accent"> $Carlo LP Balance:</div>
+              <div className="stat-value">{(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</div>
+              <br />
             </div>
-          </>
+            <div className="flex flex-row">
+              <label
+                className="cursor-pointer border-2"
+                onClick={() => {
+                  setFcknBalance(floor10(Number(balance.data) || 0, 10));
+                  console.log("max", floor10(Number(stakedBalance.data) || 0, 1));
+                }}
+              >
+                MAX
+              </label>
+              <input
+                className="border-2 text-accent"
+                placeholder="$Carlo"
+                value={(fcknBalance * 1e-18).toFixed(3)}
+                type="number"
+                onChange={e => setFcknBalance(Number(e.target.value) * 1e18)}
+              />
+            </div>
+            <Tippy className="relative" content={<span>Deposit</span>}>
+              <button className="btn btn-primary" onClick={handleStakeFunction} disabled={isStakePending}>
+                {isStakePending ? <span className="loading loading-spinner loading-sm"></span> : "Deposit"}
+              </button>
+            </Tippy>
+          </div>
         );
 
       case "withdraw":
         return (
-          <>
-            <div className="card-body space-y-2 justify-end">
-              <strong>Withdraw $Carlo</strong>
-              <input
-                className="border-2"
-                placeholder="$xFCKN Balance"
-                value={xFcknBalance}
-                type="number"
-                onChange={e => setXFcknBalance(Number(e.target.value))}
-                style={{ color: "white" }}
-              />
-              <Tippy className="relative" content={<span>Withdraw</span>}>
-                <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
-                  {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
-                </button>
-              </Tippy>
+          <div className="flex flex-col card-body">
+            <span className="text-2xl font-twist">UNSTAKING</span>
+            <div class="stats p-2">
+              <div class="stat-title text-accent"> $Carlo Balance:</div>
+              <div className="stat-value">{(Number(balance?.data) * 1e-18).toFixed(3)} $Carlo</div>
+              <br />
             </div>
-          </>
+            <div className="flex flex-row">
+              <label
+                className="cursor-pointer border-2"
+                onClick={() => {
+                  setXFcknBalance(floor10(Number(stakedBalance.data) || 0, 10));
+                  console.log("max", floor10(Number(stakedBalance.data) || 0, 1));
+                }}
+              >
+                MAX
+              </label>
+              <input
+                className="border-2 text-accent"
+                placeholder="$Carlo"
+                value={(xFcknBalance * 1e-18).toFixed(3)}
+                type="number"
+                onChange={e => setXFcknBalance(Number(e.target.value) * 1e18)}
+              />
+            </div>
+            <Tippy className="relative" content={<span>Withdraw</span>}>
+              <button className="btn btn-primary" onClick={handleUnstakeFunction} disabled={isUnstakePending}>
+                {isUnstakePending ? <span className="loading loading-spinner loading-sm"></span> : "Withdraw"}
+              </button>
+            </Tippy>
+          </div>
         );
 
       default:
@@ -278,76 +307,93 @@ const LiqStaking = () => {
           contentLabel="Exercise Completed"
           style={modalStyles}
         >
-          <div class="card w-96 bg-base-100 shadow-xl font-satoshi text-[#3029ff] p-6 h-full max-h-1/2">
+          <div class="card w-full bg-base-100 shadow-xl font-satoshi text-[#3029ff] p-6 h-full max-h-1/2 max-w-2/3 flex flex-col">
             <div className="card-title font-satoshi text-3xl">
               FARM
-              <span onClick={() => setModal2IsOpen(false)} className="absolute text-2xl font-twist right-4">
+              <span
+                onClick={() => setModal2IsOpen(false)}
+                className="cursor-pointer absolute text-2xl font-twist right-4"
+              >
                 X
               </span>
             </div>
-            <div class="card-body">{liquidityFunctionRender()}</div>
-            <Tippy className="relative" content={<span>Claim Rewards</span>}>
-              <button
-                className={`btn btn-primary ${isClaiming ? "loading" : ""}`}
-                onClick={handleClaimFunction}
-                disabled={isClaiming}
-              >
-                {isClaiming ? "Claiming..." : "Claim Rewards"}
-              </button>
-            </Tippy>
-            <p className="flex flex-col">
-              {isClaiming ? <span className="loading loading-spinner loading-sm"></span> : ""}
-              $Carlo/$wETH LP Token Balance: {(Number(balance.data) * 1e-18).toFixed(3)}
-              <span className="text-3x1">
-                Staked $Carlo LP Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)}
-              </span>
-              Earned: {(Number(earned.data) * 1e-18).toFixed(3)}
-              <br />
-              $Carlo Options:{" "}
-              {farmList.map((farm, index) => {
-                return (
-                  <button
-                    className="border-emerald-200 border-solid pl-2"
-                    key={index}
-                    onClick={() => setFarmIndex(index)}
-                  >
-                    {farm.name}
-                  </button>
-                );
-              })}
-            </p>
-            Selected Farm: <strong>{currentFarm.name}</strong>
-            <a
-              className="text-xs text-blue-500"
-              href={`https://basescan.org/token/${currentFarm.pool}`}
-              target="_blank"
-            >
-              View in BaseScan
-            </a>
-            <div className="card-actions justify-end">
-              <div className="card-actions justify-end p-2">
-                <div className="flex flex-row space-x-4">
-                  <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
+            <div className="flex flex-row">
+              <div class="card-body flex flex-col">{liquidityFunctionRender()}</div>
+
+              <div className="flex flex-col card-body mt-12">
+                <div className="card-body">
+                  <div className="stats">
+                    <div class="stat-title text-accent"> Earned: </div>
+                    <div className="stat-value"> {(Number(earned.data) * 1e-18).toFixed(3)} $Carlo</div>
+                    <div class="stat-desc text-accent">
+                      {" "}
+                      xCarlo Shares {(Number(stakedBalance?.data) * 1e-18).toFixed(3)}{" "}
+                    </div>
+                    {isClaiming ? <span className="loading loading-spinner loading-sm"></span> : ""}
+                    <div className="stat-desc">
+                      Farms:{" "}
+                      {farmList.map((farm, index) => {
+                        return (
+                          <button
+                            className="border-emerald-200 border-solid pl-2"
+                            key={index}
+                            onClick={() => setFarmIndex(index)}
+                          >
+                            {farm.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <Tippy className="relative" content={<span>Claim Rewards</span>}>
                     <button
-                      className="color-blue-500 border-e-rose-200 border-2 bg-contain bg-no-repeat h-[35px] w-[75px]"
-                      onClick={() => {
-                        setOptIndex(optts.indexOf("deposit"));
-                      }}
+                      className={`btn btn-primary ${isClaiming ? "loading" : ""}`}
+                      onClick={handleClaimFunction}
+                      disabled={isClaiming}
                     >
-                      Add
-                    </button>
-                  </Tippy>
-                  <Tippy className="relative" content={<span>Unwrap $Carlo</span>}>
-                    <button
-                      className="color-blue-500 border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[35px] w-[75px]"
-                      onClick={() => {
-                        setOptIndex(optts.indexOf("withdraw"));
-                      }}
-                    >
-                      Remove
+                      {isClaiming ? "Claiming..." : "Claim Rewards"}
                     </button>
                   </Tippy>
                 </div>
+              </div>
+            </div>
+            <div className="card-actions justify-end p-2">
+              <div className="flex flex-col">
+                <span>
+                  Selected Farm: <br />
+                  <strong>{currentFarm.name}</strong>
+                </span>
+                <span>
+                  <a
+                    className="text-xs text-blue-500"
+                    href={`https://basescan.org/token/${currentFarm.pool}`}
+                    target="_blank"
+                  >
+                    View in BaseScan
+                  </a>
+                </span>
+              </div>
+              <div className="flex flex-row space-x-4">
+                <Tippy className="relative" content={<span>Wrap $Carlo</span>}>
+                  <button
+                    className="color-blue-500 border-e-rose-200 border-2 bg-contain bg-no-repeat h-[35px] w-[75px]"
+                    onClick={() => {
+                      setOptIndex(optts.indexOf("deposit"));
+                    }}
+                  >
+                    Add
+                  </button>
+                </Tippy>
+                <Tippy className="relative" content={<span>Unwrap $Carlo</span>}>
+                  <button
+                    className="color-blue-500 border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[35px] w-[75px]"
+                    onClick={() => {
+                      setOptIndex(optts.indexOf("withdraw"));
+                    }}
+                  >
+                    Remove
+                  </button>
+                </Tippy>
               </div>
             </div>
           </div>
