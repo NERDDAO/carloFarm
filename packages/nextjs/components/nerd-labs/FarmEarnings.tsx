@@ -44,27 +44,27 @@ function FarmEarnings(props: { farmName: string; pricePerShare: number }) {
 
   return (
     <div className="font-satoshi text-[#3029ff] card p-4">
-      <h1 className="text-2xl font-twist">Contract Stats</h1>
-      <div class="stats">
-        <div class="stat-title text-accent"> Total Supply Staked:</div>
-        <div className="stat-value">
-          {totalSupply ? (Number(totalSupply) * 1e-18 * pricePerShare * 1e-18).toFixed(2) : null}
-        </div>
-        <div class="stat-title text-accent">Monthly Interest per Token:</div>
-        <div className="stat-value">{monthlyInterest ? (monthlyInterest * 1e18).toFixed(3) : null}%</div>
-        <div class="stat-desc text-accent"> NO lockup period or penalties</div>
+      <h1 className="text-2xl card-body">
+        <span className="font-twist"> Contract Stats</span>
+        <div class="stats">
+          <div class="stat-title text-accent"> Total Supply Staked:</div>
+          <div className="stat-value">
+            {totalSupply ? (Number(totalSupply) * 1e-18 * pricePerShare * 1e-18).toFixed(2) : null}
+          </div>
+          <div class="stat-title text-accent">Monthly Interest per Token:</div>
+          <div className="stat-value">{monthlyInterest ? (monthlyInterest * 1e18).toFixed(3) : null}%</div>
+          <div class="stat-desc text-accent"> NO lockup period or penalties</div>
 
-        <div class="stat-desc text-accent"> Stake and Unstake anytime</div>
-      </div>
-      <p></p>
-      <p> </p>
-      <a
-        className="text-xs text-blue-500"
-        href="https://basescan.org/token/0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005"
-        target="_blank"
-      >
-        View in BaseScan
-      </a>
+          <div class="stat-desc text-accent"> Stake and Unstake anytime</div>
+        </div>
+        <a
+          className="text-xs text-blue-500"
+          href="https://basescan.org/token/0x6901d3A45dc3e4E79f5eDd60ABE57C35feBB8005"
+          target="_blank"
+        >
+          View in BaseScan
+        </a>
+      </h1>
     </div>
   );
 }

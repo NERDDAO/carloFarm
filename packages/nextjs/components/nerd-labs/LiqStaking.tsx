@@ -308,8 +308,7 @@ const LiqStaking = () => {
           style={modalStyles}
         >
           <div class="card w-full bg-base-100 shadow-xl font-satoshi text-[#3029ff] p-6 h-full max-h-1/2 max-w-2/3 flex flex-col">
-            <div className="card-title font-satoshi text-3xl">
-              FARM
+            <div className="card-title font-twist text-2xl">
               <span
                 onClick={() => setModal2IsOpen(false)}
                 className="cursor-pointer absolute text-2xl font-twist right-4"
@@ -317,7 +316,7 @@ const LiqStaking = () => {
                 X
               </span>
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-col sm:flex-row">
               <div class="card-body flex flex-col">{liquidityFunctionRender()}</div>
 
               <div className="flex flex-col card-body mt-12">
@@ -327,7 +326,7 @@ const LiqStaking = () => {
                     <div className="stat-value"> {(Number(earned.data) * 1e-18).toFixed(3)} $Carlo</div>
                     <div class="stat-desc text-accent">
                       {" "}
-                      xCarlo Shares {(Number(stakedBalance?.data) * 1e-18).toFixed(3)}{" "}
+                      Staked LP Tokens:{(Number(stakedBalance?.data) * 1e-18).toFixed(3)}{" "}
                     </div>
                     {isClaiming ? <span className="loading loading-spinner loading-sm"></span> : ""}
                     <div className="stat-desc">

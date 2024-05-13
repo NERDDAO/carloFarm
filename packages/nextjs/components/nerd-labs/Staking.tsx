@@ -248,7 +248,7 @@ const Staking = () => {
           <span onClick={() => setModalIsOpen(false)} className="cursor-pointer absolute text-2xl font-twist right-4">
             X
           </span>
-          <div class="card-body flex flex-row">
+          <div class="card-body flex flex-col sm:flex-row">
             {functionRender()}
 
             <FarmEarnings farmName="xStakingPool" pricePerShare={Number(ppShare.data)} />
